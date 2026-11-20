@@ -4,10 +4,14 @@ const fs = require('fs');
 const os = require('os');
 const { exec } = require('child_process');
 
-// GPU & memory optimizations
+// Ultra-low-power ESP32 profile & GPU zero-load optimizations
+app.commandLine.appendSwitch('disable-gpu-compositing');
+app.commandLine.appendSwitch('disable-gpu-rasterization');
+app.commandLine.appendSwitch('disable-accelerated-2d-canvas');
 app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
 app.commandLine.appendSwitch('disable-accelerated-video-decode');
-app.commandLine.appendSwitch('js-flags', '--max-old-space-size=256');
+app.commandLine.appendSwitch('disable-background-timer-throttling');
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=128');
 
 let controlCenterWin = null;
 let secondaryHudWin = null;
@@ -96,6 +100,8 @@ function createControlCenterWindow() {
     backgroundColor: '#0d1117',
     title: 'Multiscreen Tool - Control Center',
     frame: true,
+    hasShadow: false,
+    thickFrame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -158,6 +164,7 @@ function createSecondaryHudWindow(monitorIndex, dockMode = 'left', alwaysOnTop =
     alwaysOnTop: alwaysOnTop,
     skipTaskbar: false,
     hasShadow: false,
+    thickFrame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -199,6 +206,7 @@ function startWallpaperWindow(monitorIndex) {
     alwaysOnTop: false,
     skipTaskbar: true,
     hasShadow: false,
+    thickFrame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -335,7 +343,7 @@ function startTelemetryBroadcast() {
     if (controlCenterWin && !controlCenterWin.isDestroyed() && !controlCenterWin.isMinimized()) {
       controlCenterWin.webContents.send('telemetry-update', stats);
     }
-  }, 3000);
+  }, 5000);
 }
 
 // Scan local videos in Downloads and Videos
@@ -488,10 +496,10 @@ ipcMain.handle('get-wallpaper-status', () => {
   return { isRunning: wallpaperWin !== null && !wallpaperWin.isDestroyed() };
 });
 
-// Windows Media Session Integration (WinRT)
+// Windows Media Session Integration (WinRT) - Safe Non-Spawning Profile
 let mediaSessionCache = null;
-let mediaSessionCacheTime = 0;
-let mediaSessionInFlight = null;
+let lastMediaFetchTime = 0;
+let mediaFetchInFlight = null;
 
 const MEDIA_SESSION_PS = `
 try {
@@ -551,55 +559,56 @@ try {
 
 const MEDIA_SESSION_CMD = Buffer.from(MEDIA_SESSION_PS, 'utf16le').toString('base64');
 
-function fetchMediaSession() {
+// Explicit one-shot check only on manual user demand (never on timer, strict 6s cooldown)
+function fetchMediaSessionExplicit() {
   const now = Date.now();
-  if (mediaSessionCacheTime && (now - mediaSessionCacheTime < 5000)) {
+  if (lastMediaFetchTime && (now - lastMediaFetchTime < 6000)) {
     return Promise.resolve(mediaSessionCache);
   }
-  if (mediaSessionInFlight) {
-    return mediaSessionInFlight;
+  if (mediaFetchInFlight) {
+    return mediaFetchInFlight;
   }
 
-  mediaSessionInFlight = new Promise((resolve) => {
-    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${MEDIA_SESSION_CMD}`, { timeout: 4000 }, (err, stdout) => {
+  lastMediaFetchTime = now;
+
+  mediaFetchInFlight = new Promise((resolve) => {
+    exec(`powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand ${MEDIA_SESSION_CMD}`, { timeout: 2500 }, (err, stdout) => {
+      mediaFetchInFlight = null;
       if (err || !stdout) {
+        mediaSessionCache = null;
         resolve(null);
         return;
       }
       try {
         const text = stdout.trim();
         if (!text || text === 'null') {
+          mediaSessionCache = null;
           resolve(null);
         } else {
           const data = JSON.parse(text);
           if (!data || (!data.title && !data.artist && !data.Title && !data.Artist)) {
+            mediaSessionCache = null;
             resolve(null);
           } else {
-            resolve({
+            mediaSessionCache = {
               title: data.title || data.Title || '',
               artist: data.artist || data.Artist || '',
               albumArt: data.albumArt || data.AlbumArt || null,
               position: typeof data.position === 'number' ? data.position : (data.Position || 0),
               duration: typeof data.duration === 'number' ? data.duration : (data.Duration || 0),
               isPlaying: data.isPlaying !== undefined ? Boolean(data.isPlaying) : Boolean(data.IsPlaying),
-            });
+            };
+            resolve(mediaSessionCache);
           }
         }
       } catch (_) {
+        mediaSessionCache = null;
         resolve(null);
       }
     });
-  }).then((res) => {
-    mediaSessionCache = res;
-    mediaSessionCacheTime = Date.now();
-    mediaSessionInFlight = null;
-    return res;
-  }).catch(() => {
-    mediaSessionInFlight = null;
-    return null;
   });
 
-  return mediaSessionInFlight;
+  return mediaFetchInFlight;
 }
 
 function sendMediaControl(action) {
@@ -625,19 +634,34 @@ try {
 `;
   const b64 = Buffer.from(ps, 'utf16le').toString('base64');
   return new Promise((resolve) => {
-    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${b64}`, { timeout: 2500 }, (err, stdout) => {
-      mediaSessionCacheTime = 0; // invalidate cache
+    exec(`powershell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand ${b64}`, { timeout: 2000 }, (err, stdout) => {
+      lastMediaFetchTime = 0; // reset cooldown so one refresh is allowed after click
       resolve(!err && stdout && stdout.trim() === 'True');
     });
   });
 }
 
-ipcMain.handle('get-media-session', async () => {
-  return await fetchMediaSession();
+// IPC Handlers for Media Session:
+// 1. Passive / permanent cache retrieval: ZERO child process spawning, 0.0ms execution
+ipcMain.handle('get-media-session', () => {
+  return mediaSessionCache;
+});
+
+// 2. Explicit manual user refresh one-shot
+ipcMain.handle('refresh-media', async () => {
+  return await fetchMediaSessionExplicit();
 });
 
 ipcMain.handle('control-media-session', async (event, action) => {
-  return await sendMediaControl(action);
+  const ok = await sendMediaControl(action);
+  // Single delayed one-shot refresh to broadcast updated playing state back to HUD
+  setTimeout(async () => {
+    const updated = await fetchMediaSessionExplicit();
+    if (secondaryHudWin && !secondaryHudWin.isDestroyed()) {
+      secondaryHudWin.webContents.send('media-session-updated', updated);
+    }
+  }, 400);
+  return ok;
 });
 
 // App Lifecycle

@@ -3,25 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScreenPal</title>
+  <title>ScreenPal - Control Center (ESP32 E-Ink)</title>
   <link rel="stylesheet" href="src/css/impeccable-ios.css">
   <style>
     /* Monitor Canvas Map */
     .monitor-map-view {
       width: 100%;
-      height: 130px;
-      background: var(--bg-desktop);
-      border-radius: var(--radius-sm);
+      height: 120px;
+      background: var(--bg-input);
+      border-radius: var(--radius-xs);
       border: 1px dashed var(--border-card);
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .map-box {
-      border: 2px solid var(--border-card);
+      border: 1px solid var(--border-card);
       background: var(--bg-chip);
       border-radius: var(--radius-xs);
       position: absolute;
@@ -29,23 +29,22 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: var(--text-main);
       cursor: pointer;
-      transition: all var(--trans-fast);
+      transition: background-color var(--trans-instant), color var(--trans-instant);
     }
     .map-box.active {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 16px var(--glow-accent);
-      color: #fff;
+      background: var(--text-main);
+      color: var(--bg-panel);
     }
 
     /* Widget Picker List */
     .widget-picker-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       max-height: 380px;
       overflow-y: auto;
       padding-right: 4px;
@@ -56,29 +55,27 @@
       justify-content: space-between;
       background: var(--bg-chip);
       border: 1px solid var(--border-card);
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      transition: all var(--trans-fast);
+      padding: 8px 12px;
+      border-radius: var(--radius-xs);
     }
     .widget-picker-item:hover {
-      background: var(--bg-card-hover);
-      border-color: var(--border-card-hover);
+      background: var(--bg-chip-hover);
     }
     .widget-item-info {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
-    .widget-item-icon { font-size: 20px; }
-    .widget-item-name { font-size: 13px; font-weight: 600; color: #fff; }
-    .widget-item-cat { font-size: 11px; color: var(--text-dim); }
+    .widget-item-icon { font-size: 16px; }
+    .widget-item-name { font-size: 11px; font-weight: 700; color: var(--text-main); font-family: var(--font-mono); }
+    .widget-item-cat { font-size: 9px; color: var(--text-dim); font-family: var(--font-mono); }
 
     /* Switch */
     .ios-switch {
       position: relative;
       display: inline-block;
-      width: 38px;
-      height: 22px;
+      width: 34px;
+      height: 18px;
     }
     .ios-switch input { opacity: 0; width: 0; height: 0; }
     .switch-slider {
@@ -87,42 +84,42 @@
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: var(--bg-chip);
       border: 1px solid var(--border-card);
-      transition: 0.22s var(--ease-out-expo);
-      border-radius: 22px;
+      border-radius: 2px;
     }
     .switch-slider:before {
       position: absolute;
       content: "";
-      height: 14px;
-      width: 14px;
-      left: 3px;
-      bottom: 3px;
-      background-color: #fff;
-      transition: 0.22s var(--ease-out-expo);
-      border-radius: 50%;
+      height: 12px;
+      width: 12px;
+      left: 2px;
+      bottom: 2px;
+      background-color: var(--text-main);
+      border-radius: 1px;
     }
     input:checked + .switch-slider {
-      background-color: var(--accent-cyan);
-      border-color: var(--accent-cyan);
+      background-color: var(--text-main);
+      border-color: var(--border-card);
     }
     input:checked + .switch-slider:before {
       transform: translateX(16px);
-      background-color: #11111b;
+      background-color: var(--bg-panel);
     }
   </style>
 </head>
-<body class="theme-catppuccin">
+<body class="theme-eink-paper">
   <div class="cc-root">
     
-    <!-- Titlebar -->
+    <!-- Titlebar: Authentic E-Paper Header with ESP32 Badge -->
     <header class="cc-titlebar">
       <div class="cc-titlebar-left">
+        <span class="hud-status-dot" title="ESP32 Engine Ready"></span>
         <span class="cc-title">ScreenPal</span>
+        <span class="hud-badge-esp32">ESP32 LOW-PWR</span>
         <span class="cc-version">v2.1</span>
       </div>
       <div class="cc-titlebar-right">
         <button id="btn-relaunch-hud" class="cc-btn cc-btn-primary">
-          🚀 Launch Secondary HUD
+          ▶ Launch E-Ink HUD
         </button>
         <button id="btn-close-hud" class="cc-btn">
           ✕ Close HUD
@@ -152,7 +149,7 @@
                 <span>Display Placement & Orientation</span>
                 <span class="hud-pill" id="screen-info-badge">2 Displays</span>
               </div>
-              <div class="cc-card-desc">Automatic detection of primary landscape and secondary portrait monitors</div>
+              <div class="cc-card-desc">Automatic detection of secondary vertical and horizontal displays</div>
 
               <div id="monitor-map-canvas" class="monitor-map-view"></div>
 
@@ -162,11 +159,12 @@
                   <select id="select-monitor" class="cc-select"></select>
                 </div>
                 <div>
-                  <label class="cc-label">Refresh Rate (FPS)</label>
+                  <label class="cc-label">Refresh Rate (ESP32 Eco)</label>
                   <select id="select-fps" class="cc-select">
-                    <option value="60">60 FPS (Silky Smooth)</option>
-                    <option value="30">30 FPS (Eco Mode)</option>
-                    <option value="120">120 FPS (High Refresh)</option>
+                    <option value="4">4 FPS (Authentic E-Ink)</option>
+                    <option value="15">15 FPS (Eco Refresh)</option>
+                    <option value="30">30 FPS (Standard)</option>
+                    <option value="60">60 FPS (Silky)</option>
                   </select>
                 </div>
               </div>
@@ -174,38 +172,38 @@
 
             <div class="cc-card">
               <div class="cc-card-title">Side Docking</div>
-              <div class="cc-card-desc">Attach HUD elegantly to the edge of your vertical display</div>
+              <div class="cc-card-desc">Attach E-Ink HUD to the edge of your secondary vertical monitor</div>
 
               <div class="cc-dock-grid">
                 <div class="cc-dock-card active" data-dock="left">
-                  <div style="font-size: 20px; margin-bottom: 4px;">◧</div>
-                  <div style="font-size: 12px; font-weight: 700; color: #fff;">Dock Left</div>
-                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Dock Left Side</div>
+                  <div style="font-size: 16px; margin-bottom: 2px;">◧</div>
+                  <div style="font-size: 11px; font-weight: 700;">Dock Left</div>
+                  <div style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Left Edge</div>
                 </div>
                 <div class="cc-dock-card" data-dock="right">
-                  <div style="font-size: 20px; margin-bottom: 4px;">◨</div>
-                  <div style="font-size: 12px; font-weight: 700; color: #fff;">Dock Right</div>
-                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Dock Right Side</div>
+                  <div style="font-size: 16px; margin-bottom: 2px;">◨</div>
+                  <div style="font-size: 11px; font-weight: 700;">Dock Right</div>
+                  <div style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Right Edge</div>
                 </div>
                 <div class="cc-dock-card" data-dock="full">
-                  <div style="font-size: 20px; margin-bottom: 4px;">⛶</div>
-                  <div style="font-size: 12px; font-weight: 700; color: #fff;">Full Width</div>
-                  <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Full Width</div>
+                  <div style="font-size: 16px; margin-bottom: 2px;">⛶</div>
+                  <div style="font-size: 11px; font-weight: 700;">Full Width</div>
+                  <div style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Fill Screen</div>
                 </div>
               </div>
 
-              <div style="margin-bottom: 14px;">
+              <div style="margin-bottom: 12px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                   <label class="cc-label">Sidebar Width</label>
-                  <span id="dock-width-val" style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);">360 px</span>
+                  <span id="dock-width-val" style="font-family: var(--font-mono); font-size: 10px; color: var(--text-main);">360 px</span>
                 </div>
                 <input type="range" id="slider-dock-width" min="280" max="500" value="360" step="10" style="width: 100%;">
               </div>
 
-              <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-card);">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px dashed var(--border-card);">
                 <div>
-                  <div style="font-size: 13px; font-weight: 600;">Always on Top Mode</div>
-                  <div style="font-size: 11px; color: var(--text-dim);">Float HUD above other windows on your secondary screen</div>
+                  <div style="font-size: 11px; font-weight: 700; font-family: var(--font-mono);">Always on Top Mode</div>
+                  <div style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Float E-Ink HUD above all secondary monitor windows</div>
                 </div>
                 <label class="ios-switch">
                   <input type="checkbox" id="check-always-on-top" checked>
@@ -219,27 +217,27 @@
           <div>
             <div class="cc-card">
               <div class="cc-card-title">
-                <span>Hardware Telemetry</span>
+                <span>Microcontroller Telemetry</span>
                 <span class="hud-status-dot"></span>
               </div>
-              <div class="cc-card-desc">Native C++ V8 engine telemetry, zero CPU overhead</div>
+              <div class="cc-card-desc">Zero CPU overhead Node.js OS difference calculations</div>
 
-              <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
                 <div class="caelestia-waybar-cluster">
-                  <span class="cael-chip chip-cyan" id="cc-tel-cpu"> CPU: 15% (3.7GHz)</span>
-                  <span class="cael-chip chip-mauve" id="cc-tel-mem">󰍛 RAM: 8.4G / 16.0G</span>
+                  <span class="cael-chip" id="cc-tel-cpu">CPU: 15% (3.7GHz)</span>
+                  <span class="cael-chip" id="cc-tel-mem">RAM: 8.4G / 16.0G</span>
                 </div>
                 <div class="caelestia-waybar-cluster">
-                  <span class="cael-chip chip-green" id="cc-tel-disk">󰋊 SSD C: 46% (114G / 249G)</span>
-                  <span class="cael-chip chip-peach" id="cc-tel-net">󰖩 NET: ▲24K ▼86K</span>
+                  <span class="cael-chip" id="cc-tel-disk">ROM C: 46% (114G / 249G)</span>
+                  <span class="cael-chip" id="cc-tel-net">NET: ▲24K ▼86K</span>
                 </div>
               </div>
             </div>
 
             <div class="cc-card">
-              <div class="cc-card-title">HUD Display Controls</div>
+              <div class="cc-card-title">E-Ink HUD Display Controls</div>
               <div class="cc-card-desc">Quick actions for your secondary display panel</div>
-              <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button id="btn-toggle-hud-full" class="cc-btn">
                   ⛶ Toggle Fullscreen on Secondary Screen
                 </button>
@@ -257,133 +255,128 @@
       <section id="tab-themes" class="cc-panel">
         <div class="cc-card">
           <div class="cc-card-title">
-            <span>Themes</span>
-            <span class="hud-pill" id="current-theme-badge">Catppuccin Sherbet Active</span>
+            <span>Authentic E-Paper & ESP32 Themes</span>
+            <span class="hud-pill" id="current-theme-badge">E-Ink Paper Active</span>
           </div>
           <div class="cc-card-desc">
-            Curated visual themes: soft pastels, neon cyberpunk, and retro amber
+            4 authentic high-contrast E-Ink palettes designed for 24/7 comfortable reading and zero GPU strain
           </div>
 
           <div class="cc-theme-grid omarchy-theme-grid">
             
-            <!-- 1. Catppuccin -->
+            <!-- 1. E-Ink Paper (Default) -->
             <div class="cc-theme-card omarchy-theme-card active" data-theme-name="catppuccin">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">1. Catppuccin</span>
-                <span class="hud-pill" style="font-size: 10px;">Default</span>
+                <span style="font-weight: 700; font-size: 13px;">1. E-Ink Paper (Warm)</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Default</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Warm pastel mocha, soft peach accents, lavender mauve, and gentle sky blue.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Warm E-Ink paper (#f5f2eb), deep charcoal ink (#1c1b18), crisp 1px borders. Real Kindle / reMarkable screen aesthetic.
               </p>
               <div class="theme-swatch-row">
-                <div class="theme-swatch" style="background: #11111b;"></div>
-                <div class="theme-swatch" style="background: #1e1e2e;"></div>
-                <div class="theme-swatch" style="background: #89dceb;"></div>
-                <div class="theme-swatch" style="background: #cba6f7;"></div>
-                <div class="theme-swatch" style="background: #fab387;"></div>
+                <div class="theme-swatch" style="background: #f5f2eb;"></div>
+                <div class="theme-swatch" style="background: #ece8df;"></div>
+                <div class="theme-swatch" style="background: #282723;"></div>
+                <div class="theme-swatch" style="background: #1c1b18;"></div>
               </div>
             </div>
 
-            <!-- 2. Tokyo Night -->
+            <!-- 2. E-Ink Dark (Inverted) -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="tokyonight">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">2. Tokyo Night</span>
-                <span class="hud-pill" style="font-size: 10px; color: #7aa2f7; border-color: #7aa2f7;">Neon</span>
+                <span style="font-weight: 700; font-size: 13px;">2. E-Ink Dark (Inverted)</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Night</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Deep midnight indigo, neon blue, vivid magenta highlights, and vibrant cyan.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Deep carbon background (#121314) with crisp chalk white text (#f0ede6). High-contrast night e-paper mode.
               </p>
               <div class="theme-swatch-row">
-                <div class="theme-swatch" style="background: #16161e;"></div>
-                <div class="theme-swatch" style="background: #24283b;"></div>
-                <div class="theme-swatch" style="background: #7aa2f7;"></div>
-                <div class="theme-swatch" style="background: #bb9af7;"></div>
-                <div class="theme-swatch" style="background: #f7768e;"></div>
+                <div class="theme-swatch" style="background: #121314;"></div>
+                <div class="theme-swatch" style="background: #1a1c1e;"></div>
+                <div class="theme-swatch" style="background: #33363a;"></div>
+                <div class="theme-swatch" style="background: #f0ede6;"></div>
               </div>
             </div>
 
-            <!-- 3. Amberbyte -->
+            <!-- 3. ESP32 Cyberdeck Amber -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="amberbyte">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">3. Amberbyte</span>
-                <span class="hud-pill" style="font-size: 10px; color: #ffb000; border-color: #ffb000;">Cyber</span>
+                <span style="font-weight: 700; font-size: 13px;">3. ESP32 Amber (Cyberdeck)</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Retro</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Pure phosphor amber glowing on obsidian, retro cyberpunk technical terminal.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Obsidian hardware background (#141108) with pure phosphor amber ink (#ffb300). Authentic retro cyberdeck terminal.
               </p>
               <div class="theme-swatch-row">
-                <div class="theme-swatch" style="background: #0c0a07;"></div>
-                <div class="theme-swatch" style="background: #1c1711;"></div>
-                <div class="theme-swatch" style="background: #ffb000;"></div>
-                <div class="theme-swatch" style="background: #ffd269;"></div>
+                <div class="theme-swatch" style="background: #141108;"></div>
+                <div class="theme-swatch" style="background: #1c170c;"></div>
+                <div class="theme-swatch" style="background: #382b0e;"></div>
+                <div class="theme-swatch" style="background: #ffb300;"></div>
               </div>
             </div>
 
-            <!-- 4. Blueberry -->
+            <!-- 4. LilyGO T-Display Cyan -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="blueberry">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">4. Blueberry</span>
-                <span class="hud-pill" style="font-size: 10px; color: #38bdf8; border-color: #38bdf8;">Electric</span>
+                <span style="font-weight: 700; font-size: 13px;">4. LilyGO Cyan (T-Display)</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Micro</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Electric sapphire and neon cyan on deep navy slate, high contrast and clean.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Obsidian navy frame (#0a1218) with sharp ice cyan microcontroller ink (#4dd0e1). Crisp technical instrumentation.
               </p>
               <div class="theme-swatch-row">
-                <div class="theme-swatch" style="background: #0b0f19;"></div>
-                <div class="theme-swatch" style="background: #16223e;"></div>
-                <div class="theme-swatch" style="background: #38bdf8;"></div>
-                <div class="theme-swatch" style="background: #00f2fe;"></div>
+                <div class="theme-swatch" style="background: #0a1218;"></div>
+                <div class="theme-swatch" style="background: #0f1b24;"></div>
+                <div class="theme-swatch" style="background: #1a3040;"></div>
+                <div class="theme-swatch" style="background: #4dd0e1;"></div>
               </div>
             </div>
 
-            <!-- 5. Rose Pine -->
+            <!-- 5. E-Ink Rose Paper -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="rosepine">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">5. Rose Pine</span>
-                <span class="hud-pill" style="font-size: 10px; color: #ebbcba; border-color: #ebbcba;">Cozy</span>
+                <span style="font-weight: 700; font-size: 13px;">5. Rose Paper</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Warm</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Muted rose gold, deep pine green, and foam cyan on warm dusky purple.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Warm dusky purple-tinted e-paper with muted copper ink accents.
               </p>
               <div class="theme-swatch-row">
                 <div class="theme-swatch" style="background: #191724;"></div>
                 <div class="theme-swatch" style="background: #26233a;"></div>
                 <div class="theme-swatch" style="background: #ebbcba;"></div>
-                <div class="theme-swatch" style="background: #9ccfd8;"></div>
               </div>
             </div>
 
-            <!-- 6. Gruvbox -->
+            <!-- 6. Gruvbox E-Ink -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="gruvbox">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">6. Gruvbox</span>
-                <span class="hud-pill" style="font-size: 10px; color: #e78a4e; border-color: #e78a4e;">Earth</span>
+                <span style="font-weight: 700; font-size: 13px;">6. Gruvbox E-Ink</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Earth</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Earthy warm dark, retro orange, sage green, and warm cream typography.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Dark graphite base with warm retro cream and earthy ochre ink.
               </p>
               <div class="theme-swatch-row">
                 <div class="theme-swatch" style="background: #1d2021;"></div>
                 <div class="theme-swatch" style="background: #32302f;"></div>
                 <div class="theme-swatch" style="background: #e78a4e;"></div>
-                <div class="theme-swatch" style="background: #a9b665;"></div>
               </div>
             </div>
 
-            <!-- 7. Nordic Frost -->
+            <!-- 7. Nordic Frost E-Ink -->
             <div class="cc-theme-card omarchy-theme-card" data-theme-name="nordic">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">7. Nordic Frost</span>
-                <span class="hud-pill" style="font-size: 10px; color: #88c0d0; border-color: #88c0d0;">Arctic</span>
+                <span style="font-weight: 700; font-size: 13px;">7. Nordic Frost</span>
+                <span class="hud-badge-esp32" style="font-size: 9px;">Arctic</span>
               </div>
-              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">
-                Polar night slate, frost cyan, and aurora green for an ultra-chill arctic feel.
+              <p style="font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: var(--font-mono);">
+                Cool slate carbon with polar frost e-paper chalk highlights.
               </p>
               <div class="theme-swatch-row">
                 <div class="theme-swatch" style="background: #242933;"></div>
                 <div class="theme-swatch" style="background: #3b4252;"></div>
                 <div class="theme-swatch" style="background: #88c0d0;"></div>
-                <div class="theme-swatch" style="background: #a3be8c;"></div>
               </div>
             </div>
 
@@ -398,10 +391,10 @@
           <!-- Left: Widget Picker Toggles -->
           <div class="cc-card">
             <div class="cc-card-title">
-              <span>Modular Widgets Stack</span>
+              <span>Modular E-Ink Widgets Stack</span>
               <span class="hud-pill" id="active-widgets-count">8 Active</span>
             </div>
-            <div class="cc-card-desc">Toggle each widget on or off to curate your secondary desktop</div>
+            <div class="cc-card-desc">Toggle each microcontroller widget on or off for your secondary desktop</div>
             <div class="widget-picker-list" id="widget-picker-container"></div>
           </div>
 
@@ -409,11 +402,11 @@
           <div>
             <div class="cc-card">
               <div class="cc-card-title">
-                <span>Fish Friend Habitat 🐟</span>
+                <span>ESP32 Companion Habitat 🐟</span>
                 <span class="hud-pill">Interactive</span>
               </div>
               <div class="cc-card-desc">
-                Tap anywhere to drop food flakes with smooth swimming physics and eating emotes
+                Tap anywhere on the secondary screen frame to drop flakes with joyful swim physics
               </div>
 
               <div style="margin-bottom: 12px;">
@@ -426,15 +419,15 @@
                 </select>
               </div>
 
-              <div style="font-size: 11px; color: var(--text-sub); line-height: 1.5; padding: 10px; background: var(--bg-chip); border-radius: var(--radius-sm); border: 1px solid var(--border-card);">
-                💡 <b>Interactive Feeding:</b> Tap anywhere inside the tank on your secondary screen to drop flakes. The creature swims to eat with joyful animations and heart emotes!
+              <div style="font-size: 10px; color: var(--text-sub); line-height: 1.5; padding: 8px 10px; background: var(--bg-chip); border-radius: var(--radius-xs); border: 1px solid var(--border-card); font-family: var(--font-mono);">
+                💡 <b>Feeding Interaction:</b> Tap anywhere inside the E-Ink screen frame to drop food flakes. The creature swims to eat with joyful emotes!
               </div>
             </div>
 
             <div class="cc-card">
               <div class="cc-card-title">
-                <span>AI Model Rotator</span>
-                <button class="cc-btn" id="btn-rotate-models" style="padding: 4px 10px; font-size: 11px;">↻ Rotate</button>
+                <span>AI Co-Processor Rotator</span>
+                <button class="cc-btn" id="btn-rotate-models" style="padding: 2px 8px; font-size: 10px;">↻ Rotate</button>
               </div>
               <div class="cc-card-desc">Switch between leading AI models seamlessly</div>
               <div>
@@ -459,16 +452,16 @@
             </div>
             <div class="cc-card-desc">Independent layer behind all windows, fully decoupled from widgets</div>
 
-            <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+            <div style="display: flex; gap: 8px; margin-bottom: 14px;">
               <button id="btn-start-wallpaper" class="cc-btn cc-btn-primary" style="flex: 1;">
-                ▶ Start Live Wallpaper
+                ▶ Start Wallpaper
               </button>
               <button id="btn-stop-wallpaper" class="cc-btn cc-btn-danger" style="flex: 1;">
                 ⏹ Stop Wallpaper
               </button>
             </div>
 
-            <div style="margin-bottom: 12px;">
+            <div style="margin-bottom: 10px;">
               <label class="cc-label">Select Video File</label>
               <select id="select-video" class="cc-select"></select>
             </div>
@@ -507,10 +500,10 @@
               </div>
             </div>
 
-            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid var(--border-card);">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 8px; border-top: 1px dashed var(--border-card);">
               <div>
-                <div style="font-size: 13px; font-weight: 600;">Mute Audio</div>
-                <div style="font-size: 11px; color: var(--text-dim);">Silent loop in background</div>
+                <div style="font-size: 11px; font-weight: 700; font-family: var(--font-mono);">Mute Audio</div>
+                <div style="font-size: 9px; color: var(--text-dim); font-family: var(--font-mono);">Silent loop in background</div>
               </div>
               <label class="ios-switch">
                 <input type="checkbox" id="check-mute" checked>
@@ -523,9 +516,9 @@
           <div class="cc-card">
             <div class="cc-card-title">Live Preview</div>
             <div class="cc-card-desc">Real-time preview of the selected live wallpaper video</div>
-            <div style="width: 100%; height: 260px; background: #000; border-radius: var(--radius-sm); overflow: hidden; position: relative; border: 1px solid var(--border-card);">
-              <video id="cc-video-preview" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
-              <div id="cc-video-none" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; color: var(--text-dim); text-align: center; display: none;">
+            <div class="video-preview-box">
+              <video id="cc-video-preview" autoplay loop muted playsinline></video>
+              <div id="cc-video-none">
                 No video selected
               </div>
             </div>

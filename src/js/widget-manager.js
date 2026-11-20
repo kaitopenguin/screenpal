@@ -1,78 +1,77 @@
 /**
- * WIDGET MANAGEMENT ENGINE
- * Complete widget catalog, customization, sizing, and dynamic rendering.
- * Inspired by iOS 18, macOS Sonoma, and modern desktop widgets.
+ * WIDGET MANAGEMENT ENGINE — AUTHENTIC ESP32 E-INK / E-PAPER EDITION
+ * Microcontroller aesthetic, zero continuous repaints, stepped telemetry meters.
  */
 
 const WIDGET_CATALOG = [
   {
+    id: 'arch-waybar-status',
+    name: 'ESP32 Status & Power Header',
+    category: 'ESP32 System',
+    description: 'Hardware status strip displaying ESP32-S3 model, AC/battery power, and refresh rate.',
+    icon: '⚡',
+    defaultSize: 'compact',
+    sizesAvailable: ['compact'],
+  },
+  {
     id: 'fish-tank',
-    name: 'Fish Friend Habitat 🐟',
+    name: 'ESP32 Companion Habitat 🐟',
     category: 'Creature Companion',
-    description: 'Charming desktop fish companion with feeding interaction and gentle aquatic physics.',
-    icon: '🐠',
+    description: 'Physical mini E-Ink screen frame with interactive creature companion.',
+    icon: '🐟',
     defaultSize: 'large',
     sizesAvailable: ['medium', 'large', 'full'],
   },
   {
     id: 'ios-clock',
-    name: 'iOS 18 Standby Clock',
+    name: 'E-Ink RTC Monospace Clock',
     category: 'Time & Date',
-    description: 'Large typographic glowing clock with seconds tick and calendar date.',
+    description: 'Segmented pixel-styled digital clock with capitalized e-paper date string.',
     icon: '⏰',
     defaultSize: 'medium',
     sizesAvailable: ['small', 'medium'],
   },
   {
     id: 'system-telemetry',
-    name: 'Hardware Telemetry (macOS)',
+    name: 'Stepped Hardware Telemetry',
     category: 'System Performance',
-    description: 'Precision circular gauges for CPU, RAM, GPU, and SSD storage.',
-    icon: '📈',
+    description: 'Microcontroller LCD stepped block meters for CPU, SRAM/DRAM, and Flash ROM.',
+    icon: '📊',
     defaultSize: 'medium',
     sizesAvailable: ['medium', 'large'],
   },
   {
-    id: 'arch-waybar-status',
-    name: 'Compact Status Pill',
-    category: 'Telemetry Pill',
-    description: 'Ultra-dense minimalist status pill with live CPU, RAM, network, and storage indicators.',
-    icon: '📊',
-    defaultSize: 'compact',
-    sizesAvailable: ['compact'],
-  },
-  {
     id: 'ios-weather',
-    name: 'Dynamic iOS Weather',
+    name: 'E-Paper Weather Capsule',
     category: 'Weather & Sky',
-    description: 'Animated sky gradients, live temperature, humidity, wind, and 5-day forecast.',
+    description: 'Crisp 1-bit/2-bit weather icons and stepped temperature with barometer readout.',
     icon: '⛅',
     defaultSize: 'medium',
     sizesAvailable: ['medium', 'large'],
   },
   {
     id: 'dynamic-music',
-    name: 'Dynamic Music Player',
+    name: 'E-Ink Media Player',
     category: 'Media & Audio',
-    description: 'Windows Media Session player with live album art, progress bar, and playback controls.',
+    description: 'Minimalist e-ink media card with tactile 1-bit buttons and stepped progress bar.',
     icon: '🎵',
     defaultSize: 'medium',
     sizesAvailable: ['medium'],
   },
   {
     id: 'macro-deck',
-    name: 'Mac Control Center Macro Deck',
+    name: 'Tactile Macro Keypad',
     category: 'Quick Actions',
-    description: 'Stream Deck style touch tiles: Mute Mic, Volume, Screenshot, Task Manager.',
+    description: 'Hardware tactile buttons for Mute Mic, Volume, Feed Fish, and Settings.',
     icon: '🎛️',
     defaultSize: 'medium',
     sizesAvailable: ['medium'],
   },
   {
     id: 'model-rotator',
-    name: 'AI Model Rotator HUD',
+    name: 'AI Co-Processor HUD',
     category: 'AI Assistant',
-    description: 'Rotate and switch between Gemini, Claude, GPT-4o, DeepSeek, and Ollama.',
+    description: 'Rotate between Gemini, Claude, GPT-4o, DeepSeek, and local LLMs.',
     icon: '🔄',
     defaultSize: 'compact',
     sizesAvailable: ['compact', 'medium'],
@@ -81,16 +80,16 @@ const WIDGET_CATALOG = [
     id: 'pomodoro',
     name: 'Focus Pomodoro Timer',
     category: 'Productivity',
-    description: '25-minute focus session with circular countdown progress and audio chime.',
+    description: 'Crisp segmented countdown for 25-minute deep work focus intervals.',
     icon: '⏳',
     defaultSize: 'compact',
     sizesAvailable: ['compact', 'medium'],
   },
   {
     id: 'quick-notes',
-    name: 'Quick Desk Sticky Notes',
+    name: 'E-Paper Scratchpad Notes',
     category: 'Productivity',
-    description: 'Persistent markdown scratchpad directly on your secondary screen.',
+    description: 'Kindle/reMarkable style scratchpad for commands, pins, and quick memos.',
     icon: '📝',
     defaultSize: 'medium',
     sizesAvailable: ['medium', 'large'],
@@ -102,8 +101,8 @@ class WidgetManager {
     this.container = options.container || document.getElementById('widget-container') || document.getElementById('bento-widget-container');
     this.activeWidgets = options.activeWidgets || [
       'arch-waybar-status',
-      'fish-tank',
       'ios-clock',
+      'fish-tank',
       'system-telemetry',
       'ios-weather',
       'dynamic-music',
@@ -188,11 +187,12 @@ class WidgetManager {
           <div class="caelestia-tank-wrapper">
             <div class="widget-card-header">
               <div class="widget-pill-badge">
-                <span>🐟</span>
+                <span>ESP32 COMPANION 🐟</span>
+                <span style="opacity: 0.5;">//</span>
                 <span id="fish-friend-name">Lottie the Pink Axolotl</span>
               </div>
               <div class="tank-prompt-sub">
-                <span>Tap water to drop flakes</span>
+                <span>[CLICK WATER TO FEED]</span>
               </div>
             </div>
             <div class="caelestia-tank-viewport">
@@ -206,12 +206,17 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="caelestia-clock-widget">
             <div>
-              <span class="caelestia-clock-time" id="ios-hours-mins">12:00</span>
-              <span class="caelestia-clock-secs" id="ios-seconds">:00</span>
+              <div style="font-family: var(--font-mono); font-size: 9px; color: var(--text-dim); margin-bottom: 2px;">
+                ESP32-RTC // CH340
+              </div>
+              <div>
+                <span class="caelestia-clock-time" id="ios-hours-mins">12:00</span>
+                <span class="caelestia-clock-secs" id="ios-seconds">:00</span>
+              </div>
             </div>
             <div class="caelestia-clock-meta">
-              <div class="caelestia-date-chip" id="ios-date-string">WEDNESDAY, NOV 20</div>
-              <div class="caelestia-day-chip">SECONDARY DISPLAY</div>
+              <div class="caelestia-date-chip" id="ios-date-string">WEDNESDAY, 20 NOV</div>
+              <div class="caelestia-day-chip">[SYNC: RTC-NTP] [1.0 Hz]</div>
             </div>
           </div>
         `;
@@ -221,8 +226,8 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="btop-telemetry-container">
             <div class="widget-card-header">
-              <span class="widget-pill-badge">⚡ HARDWARE TELEMETRY</span>
-              <span style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-green);">● LIVE</span>
+              <span class="widget-pill-badge">ESP32 TELEMETRY // SOC MON</span>
+              <span style="font-family: var(--font-mono); font-size: 9px; color: var(--text-dim);">[■ LIVE]</span>
             </div>
             <div class="btop-metric-row">
               <div class="btop-metric-header">
@@ -235,7 +240,7 @@ class WidgetManager {
             </div>
             <div class="btop-metric-row">
               <div class="btop-metric-header">
-                <span>RAM USAGE</span>
+                <span>SRAM / DRAM</span>
                 <span class="btop-metric-val" id="tel-mem-val">8.4G / 16.0G (52%)</span>
               </div>
               <div class="btop-bar-track">
@@ -244,7 +249,7 @@ class WidgetManager {
             </div>
             <div class="btop-metric-row">
               <div class="btop-metric-header">
-                <span>SSD STORAGE (C:)</span>
+                <span>FLASH ROM (C:)</span>
                 <span class="btop-metric-val" id="tel-disk-val">114G / 249G (46%)</span>
               </div>
               <div class="btop-bar-track">
@@ -257,12 +262,17 @@ class WidgetManager {
 
       case 'arch-waybar-status':
         wrapper.innerHTML = `
-          <div class="caelestia-waybar-cluster">
-            <span class="cael-chip chip-cyan">● STATUS</span>
-            <span class="cael-chip" id="wb-cpu"> 14%</span>
-            <span class="cael-chip chip-mauve" id="wb-mem">󰍛 8.4G</span>
-            <span class="cael-chip chip-green" id="wb-net">󰖩 ▲24K ▼140K</span>
-            <span class="cael-chip chip-peach" id="wb-disk">󰋊 46%</span>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); font-size: 9px; color: var(--text-sub);">
+              <span>ESP32-S3 // E-INK DISPLAY</span>
+              <span>[PWR: AC] [4 FPS]</span>
+            </div>
+            <div class="caelestia-waybar-cluster">
+              <span class="cael-chip" id="wb-cpu">CPU: 14%</span>
+              <span class="cael-chip" id="wb-mem">RAM: 8.4G</span>
+              <span class="cael-chip" id="wb-net">NET: ▲24K ▼140K</span>
+              <span class="cael-chip" id="wb-disk">ROM: 46%</span>
+            </div>
           </div>
         `;
         break;
@@ -271,12 +281,12 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="caelestia-weather-card">
             <div>
-              <div class="weather-loc-tag">Hanoi, Vietnam</div>
-              <div class="weather-temp-big" id="weather-temp">24°</div>
+              <div class="weather-loc-tag">HANOI // 21.02°N 105.85°E</div>
+              <div class="weather-temp-big" id="weather-temp">24°C</div>
             </div>
             <div>
-              <div class="weather-condition-pill" id="weather-cond">Partly Cloudy ⛅</div>
-              <div class="weather-range-pill">H: 28° · L: 21°</div>
+              <div class="weather-condition-pill" id="weather-cond">[PARTLY CLOUDY] ⛅</div>
+              <div class="weather-range-pill">H: 28° · L: 21° · BARO: 1013hPa</div>
             </div>
           </div>
         `;
@@ -286,14 +296,14 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="caelestia-music-card macos-music-card">
             <div class="music-card-header">
-              <span class="widget-pill-badge">󰎈 NOW PLAYING</span>
-              <span id="music-status-badge" class="music-live-badge badge-idle">● IDLE</span>
+              <span class="widget-pill-badge">ESP32-DAC // AUDIO</span>
+              <span id="music-status-badge" class="music-live-badge badge-idle">[IDLE]</span>
             </div>
             <div class="music-main-body">
               <div class="music-album-art-wrap" id="music-art-wrap">
                 <img id="music-album-img" class="music-album-img" src="" alt="Album Art" style="display: none;" />
                 <div id="music-album-fallback" class="music-album-fallback">
-                  <svg class="music-fallback-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <svg class="music-fallback-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 18V5l12-2v13"></path>
                     <circle cx="6" cy="18" r="3"></circle>
                     <circle cx="18" cy="16" r="3"></circle>
@@ -305,22 +315,14 @@ class WidgetManager {
                 <div class="music-artist-text" id="music-artist">Windows Media Session</div>
                 <div class="music-controls">
                   <button class="music-ctrl-btn" id="btn-music-prev" title="Previous Track" aria-label="Previous Track">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                      <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
-                    </svg>
+                    ◀◀
                   </button>
                   <button class="music-ctrl-btn music-play-btn" id="btn-music-play" title="Play/Pause" aria-label="Play or Pause">
-                    <svg id="music-play-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <svg id="music-pause-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="display: none;">
-                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
+                    <span id="music-play-icon">▶</span>
+                    <span id="music-pause-icon" style="display: none;">❚❚</span>
                   </button>
                   <button class="music-ctrl-btn" id="btn-music-next" title="Next Track" aria-label="Next Track">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
-                      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
-                    </svg>
+                    ▶▶
                   </button>
                 </div>
               </div>
@@ -343,19 +345,19 @@ class WidgetManager {
           <div class="caelestia-macro-grid">
             <button class="caelestia-macro-btn" onclick="alert('Microphone Muted')">
               <span class="macro-icon">󰝟</span>
-              <span>Mute Mic</span>
+              <span>[MIC MUTE]</span>
             </button>
             <button class="caelestia-macro-btn" onclick="alert('Audio Muted')">
               <span class="macro-icon">󰕾</span>
-              <span>Volume</span>
+              <span>[VOLUME]</span>
             </button>
             <button class="caelestia-macro-btn" id="tile-feed-fish">
               <span class="macro-icon">🐟</span>
-              <span>Feed Fish</span>
+              <span>[FEED 🐟]</span>
             </button>
             <button class="caelestia-macro-btn" onclick="window.api?.openControlCenter ? window.api.openControlCenter() : null">
               <span class="macro-icon">⚙️</span>
-              <span>Settings</span>
+              <span>[CONFIG]</span>
             </button>
           </div>
         `;
@@ -365,10 +367,10 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="caelestia-rotator-card">
             <div>
-              <div class="widget-pill-badge" style="color: var(--accent-mauve);">󰚩 AI MODEL</div>
+              <div class="widget-pill-badge">ESP32-AI // CO-PROC</div>
               <div class="rotator-name-label" id="hud-model-name">Gemini 2.0 Flash</div>
             </div>
-            <button class="waybar-chip-btn" id="btn-quick-rotate-hud">↻ Rotate</button>
+            <button class="waybar-chip-btn" id="btn-quick-rotate-hud">[ ↻ ROTATE ]</button>
           </div>
         `;
         break;
@@ -377,12 +379,12 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="caelestia-rotator-card">
             <div>
-              <div class="widget-pill-badge">󰔚 POMODORO</div>
+              <div class="widget-pill-badge">TIMER // FOCUS</div>
               <div class="caelestia-clock-time" style="font-size: 26px;" id="pomo-display">25:00</div>
             </div>
             <div style="display: flex; gap: 6px;">
-              <button class="waybar-chip-btn" id="pomo-toggle">Start</button>
-              <button class="waybar-chip-btn" id="pomo-reset">Reset</button>
+              <button class="waybar-chip-btn" id="pomo-toggle">[ START ]</button>
+              <button class="waybar-chip-btn" id="pomo-reset">[ RESET ]</button>
             </div>
           </div>
         `;
@@ -392,9 +394,9 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div>
             <div class="widget-card-header">
-              <span class="widget-pill-badge">󰏫 DESK SCRATCHPAD</span>
+              <span class="widget-pill-badge">E-PAPER // SCRATCHPAD</span>
             </div>
-            <textarea class="caelestia-notes-box" placeholder="Quick notes, commands, todo..."></textarea>
+            <textarea class="caelestia-notes-box" placeholder="Write persistent notes, commands, pinout..."></textarea>
           </div>
         `;
         break;
@@ -410,7 +412,9 @@ class WidgetManager {
       if (window.fishTankInstance && window.fishTankInstance.destroy) {
         window.fishTankInstance.destroy();
       }
-      window.fishTankInstance = new FishFriendTank('fish-tank-canvas');
+      if (typeof FishFriendTank !== 'undefined') {
+        window.fishTankInstance = new FishFriendTank('fish-tank-canvas');
+      }
       const feedBtn = document.getElementById('tile-feed-fish');
       if (feedBtn) {
         feedBtn.addEventListener('click', () => {
@@ -456,33 +460,5 @@ class WidgetManager {
         };
       }
     }
-
-    // 3. Initialize spectrum bars if present
-    const specContainer = document.getElementById('music-spectrum-bars');
-    if (specContainer) {
-      specContainer.innerHTML = '';
-      for (let i = 0; i < 20; i++) {
-        const bar = document.createElement('div');
-        bar.className = 'spectrum-bar';
-        specContainer.appendChild(bar);
-      }
-      this.animateSpectrum();
-    }
-  }
-
-  animateSpectrum() {
-    if (this.spectrumAnimId) cancelAnimationFrame(this.spectrumAnimId);
-    let phase = 0;
-    const update = () => {
-      const bars = document.querySelectorAll('.spectrum-bar');
-      if (bars.length === 0) return;
-      phase += 0.08;
-      bars.forEach((bar, i) => {
-        const h = (Math.sin(phase + i * 0.4) * 0.5 + 0.5) * 16 + 3;
-        bar.style.height = `${h}px`;
-      });
-      this.spectrumAnimId = requestAnimationFrame(update);
-    };
-    this.spectrumAnimId = requestAnimationFrame(update);
   }
 }

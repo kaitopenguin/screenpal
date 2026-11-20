@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScreenPal</title>
+  <title>ScreenPal - ESP32 E-Ink Display</title>
   <link rel="stylesheet" href="src/css/impeccable-ios.css">
   <style>
     html, body {
@@ -17,24 +17,26 @@
     }
   </style>
 </head>
-<body class="theme-catppuccin">
+<body class="theme-eink-paper">
   <div class="hud-root">
     
-    <!-- Top bar: 44px height, clean -->
+    <!-- Top bar: 40px height, clean authentic e-paper header -->
     <header class="hud-topbar">
       <div class="hud-topbar-left">
-        <span class="hud-status-dot"></span>
-        <span class="hud-brand" id="header-brand-tag">ScreenPal</span>
+        <span class="hud-status-dot" title="ESP32 Online"></span>
+        <span class="hud-brand" id="header-brand-tag">ESP32-S3 // E-INK</span>
+        <span class="hud-badge-esp32">ESP32 LOW-PWR</span>
       </div>
       <div class="hud-topbar-right">
         <select id="hud-theme-select" class="hud-select" title="Theme">
-          <option value="catppuccin">Catppuccin</option>
-          <option value="tokyonight">Tokyo Night</option>
-          <option value="amberbyte">Amber</option>
-          <option value="blueberry">Blueberry</option>
-          <option value="rosepine">Rose Pine</option>
-          <option value="gruvbox">Gruvbox</option>
-          <option value="nordic">Nordic</option>
+          <option value="catppuccin">E-Ink Paper</option>
+          <option value="tokyonight">E-Ink Dark</option>
+          <option value="amberbyte">ESP32 Amber</option>
+          <option value="blueberry">LilyGO Cyan</option>
+          <option value="eink-paper">E-Ink Paper (Native)</option>
+          <option value="eink-dark">E-Ink Dark (Native)</option>
+          <option value="eink-amber">ESP32 Amber (Native)</option>
+          <option value="eink-cyan">LilyGO Cyan (Native)</option>
         </select>
         <button id="btn-dock-left" class="hud-icon-btn" title="Dock Left">◧</button>
         <button id="btn-dock-right" class="hud-icon-btn" title="Dock Right">◨</button>

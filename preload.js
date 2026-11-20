@@ -14,9 +14,13 @@ const api = {
   stopWallpaper: () => ipcRenderer.invoke('stop-wallpaper'),
   getWallpaperStatus: () => ipcRenderer.invoke('get-wallpaper-status'),
   getMediaSession: () => ipcRenderer.invoke('get-media-session'),
+  refreshMedia: () => ipcRenderer.invoke('refresh-media'),
   controlMediaSession: (action) => ipcRenderer.invoke('control-media-session', action),
   onTelemetry: (callback) => {
     ipcRenderer.on('telemetry-update', (event, data) => callback(data));
+  },
+  onMediaUpdate: (callback) => {
+    ipcRenderer.on('media-session-updated', (event, data) => callback(data));
   },
   onConfigUpdated: (callback) => {
     ipcRenderer.on('config-updated', (event, data) => callback(data));

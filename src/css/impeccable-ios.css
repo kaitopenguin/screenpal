@@ -1,93 +1,129 @@
 /* ==========================================================================
-   SCREENPAL DESIGN SYSTEM — NATIVE DESKTOP EDITION
-   Inspired by Raycast, Linear, and macOS Sonoma Native Applications
-   Built for 24/7 ultra-low GPU secondary monitor operation.
-   PERFORMANCE: 0% backdrop-filter, 0 filter animations, minimal GPU paint.
+   SCREENPAL DESIGN SYSTEM — AUTHENTIC ESP32 E-INK / E-PAPER EDITION
+   Engineered for Ultra-Low RAM, Zero GPU Load, and Microcontroller Aesthetic.
+   PERFORMANCE: 0% backdrop-filter, 0 CSS keyframes, 0 continuous repaints.
+   AUTHENTICITY: High-contrast ink palettes, tactile stepped block meters,
+                 Kindle/reMarkable warm paper & LilyGO/Cyberdeck displays.
    ========================================================================== */
 
 /* ==========================================================================
    1. BASE DESIGN TOKENS & SYSTEM VARIABLES
    ========================================================================== */
 :root {
-  /* System Typography Hierarchy */
+  /* Crisp Microcontroller & E-Ink Typography */
   --font-ui: -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  --font-mono: "Courier New", "Cascadia Code", "JetBrains Mono", "SF Mono", monospace;
+  --font-eink: "Courier New", monospace;
 
-  /* Standard Easing & Transitions (max 200ms ease-out) */
-  --trans-instant: 0.10s ease-out;
-  --trans-fast: 0.15s ease-out;
-  --trans-smooth: 0.20s ease-out;
+  /* Instant / Tactile Transitions (Zero GPU overhead) */
+  --trans-instant: 0.05s ease-out;
+  --trans-fast: 0.10s ease-out;
+  --trans-smooth: 0.15s ease-out;
 
-  /* Geometry & Radius */
-  --radius-xs: 6px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-card: 16px;
-  --radius-pill: 9999px;
+  /* Authentic Retro Hardware Geometry */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-card: 6px;
+  --radius-pill: 2px;
 
   /* Header Specification */
-  --header-height: 44px;
+  --header-height: 40px;
 
-  /* Static Layer Shadows (no dynamic blur computation on hover) */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-dialog: 0 8px 24px rgba(0, 0, 0, 0.45);
+  /* Tactile Hardware Drop Offsets (Solid, 0% blur) */
+  --shadow-subtle: none;
+  --shadow-card: 2px 2px 0px var(--border-card);
+  --shadow-dialog: 4px 4px 0px var(--border-card);
 
-  /* Fallback Base Theme (Default: Catppuccin) */
-  --bg-desktop: #11111b;
-  --bg-panel: #1e1e2e;
-  --bg-card: #24243e;
-  --bg-card-hover: #292945;
-  --bg-header: #181825;
-  --bg-chip: #2f2f4a;
-  --bg-chip-hover: #373756;
-  --bg-input: #1a1a28;
+  /* Default Theme: Authentic Warm E-Ink Paper */
+  --bg-desktop: #f5f2eb;
+  --bg-panel: #f5f2eb;
+  --bg-card: #ece8df;
+  --bg-card-hover: #e4dfd4;
+  --bg-header: #ede8de;
+  --bg-chip: #e2dcd0;
+  --bg-chip-hover: #d6cfc2;
+  --bg-input: #faf8f4;
 
-  --border-subtle: rgba(205, 214, 244, 0.08);
-  --border-card: rgba(205, 214, 244, 0.08);
-  --border-hover: #cba6f7;
-  --border-active: #cba6f7;
+  --border-subtle: #d3ccc0;
+  --border-card: #282723;
+  --border-hover: #1c1b18;
+  --border-active: #1c1b18;
 
-  --text-main: #cdd6f4;
-  --text-sub: #a6adc8;
-  --text-dim: #6c7086;
+  --text-main: #1c1b18;
+  --text-sub: #383630;
+  --text-dim: #5a574f;
 
-  --accent-primary: #cba6f7;
-  --accent-cyan: #89dceb;
-  --accent-blue: #89b4fa;
-  --accent-mauve: #cba6f7;
-  --accent-green: #a6e3a1;
-  --accent-peach: #fab387;
-  --accent-red: #f38ba8;
-  --accent-yellow: #f9e2af;
+  --accent-primary: #1c1b18;
+  --accent-cyan: #2d5a6b;
+  --accent-blue: #1c1b18;
+  --accent-mauve: #383630;
+  --accent-green: #2a5235;
+  --accent-peach: #6b4028;
+  --accent-red: #781c1c;
+  --accent-yellow: #5a4b1c;
 }
 
 /* ==========================================================================
-   2. 7 CURATED THEME PALETTES (SOLID OPAQUE COLORS, NO BLUR)
+   2. 4 AUTHENTIC E-PAPER / ESP32 THEMES (+ ALIASES)
    ========================================================================== */
 
-/* Theme 1: Catppuccin Sherbet (Default) */
+/* Theme 1: Authentic Warm E-Ink Paper (Default)
+   Kindle / reMarkable / LilyGO warm paper look */
+body.theme-eink-paper,
 body.theme-catppuccin,
 body.theme-arch {
-  --bg-desktop: #11111b;
-  --bg-panel: #1e1e2e;
-  --bg-card: #24243e;
-  --bg-card-hover: #2a2a46;
-  --bg-header: #181825;
-  --bg-chip: #2e2e48;
-  --bg-chip-hover: #383857;
-  --bg-input: #171724;
+  --bg-desktop: #f5f2eb;
+  --bg-panel: #f5f2eb;
+  --bg-card: #ece8df;
+  --bg-card-hover: #e4dfd4;
+  --bg-header: #ede8de;
+  --bg-chip: #e2dcd0;
+  --bg-chip-hover: #d6cfc2;
+  --bg-input: #faf8f4;
 
-  --border-subtle: rgba(205, 214, 244, 0.08);
-  --border-card: rgba(205, 214, 244, 0.08);
-  --border-hover: #cba6f7;
+  --border-subtle: #d3ccc0;
+  --border-card: #282723;
+  --border-hover: #1c1b18;
+  --border-active: #1c1b18;
 
-  --text-main: #cdd6f4;
-  --text-sub: #a6adc8;
-  --text-dim: #7f849c;
+  --text-main: #1c1b18;
+  --text-sub: #383630;
+  --text-dim: #5a574f;
 
-  --accent-primary: #cba6f7;
-  --accent-cyan: #89dceb;
+  --accent-primary: #1c1b18;
+  --accent-cyan: #2d5a6b;
+  --accent-blue: #1c1b18;
+  --accent-mauve: #383630;
+  --accent-green: #2a5235;
+  --accent-peach: #6b4028;
+  --accent-red: #781c1c;
+  --accent-yellow: #5a4b1c;
+}
+
+/* Theme 2: Inverted Night E-Ink (Deep Carbon & Chalk White) */
+body.theme-eink-dark,
+body.theme-tokyonight {
+  --bg-desktop: #121314;
+  --bg-panel: #121314;
+  --bg-card: #1a1c1e;
+  --bg-card-hover: #222528;
+  --bg-header: #151718;
+  --bg-chip: #24272b;
+  --bg-chip-hover: #2e3237;
+  --bg-input: #0e0f10;
+
+  --border-subtle: #292c30;
+  --border-card: #33363a;
+  --border-hover: #f0ede6;
+  --border-active: #f0ede6;
+
+  --text-main: #f0ede6;
+  --text-sub: #b0ada6;
+  --text-dim: #6a6760;
+
+  --accent-primary: #f0ede6;
+  --accent-cyan: #7dcfff;
   --accent-blue: #89b4fa;
   --accent-mauve: #cba6f7;
   --accent-green: #a6e3a1;
@@ -96,56 +132,30 @@ body.theme-arch {
   --accent-yellow: #f9e2af;
 }
 
-/* Theme 2: Tokyo Night */
-body.theme-tokyonight {
-  --bg-desktop: #16161e;
-  --bg-panel: #1a1b26;
-  --bg-card: #24283b;
-  --bg-card-hover: #2b3046;
-  --bg-header: #16161e;
-  --bg-chip: #2f354f;
-  --bg-chip-hover: #39405f;
-  --bg-input: #13141b;
-
-  --border-subtle: rgba(122, 162, 247, 0.12);
-  --border-card: rgba(122, 162, 247, 0.12);
-  --border-hover: #7aa2f7;
-
-  --text-main: #c0caf5;
-  --text-sub: #a9b1d6;
-  --text-dim: #565f89;
-
-  --accent-primary: #7aa2f7;
-  --accent-cyan: #7dcfff;
-  --accent-blue: #7aa2f7;
-  --accent-mauve: #bb9af7;
-  --accent-green: #9ece6a;
-  --accent-peach: #ff9e64;
-  --accent-red: #f7768e;
-  --accent-yellow: #e0af68;
-}
-
-/* Theme 3: Amberbyte (Cyberpunk Terminal) */
+/* Theme 3: ESP32 Cyberdeck Amber E-Paper (Retro Phosphor Amber) */
+body.theme-eink-amber,
 body.theme-amberbyte,
-body.theme-retro {
-  --bg-desktop: #0c0a07;
-  --bg-panel: #1a160f;
-  --bg-card: #231c14;
-  --bg-card-hover: #2d241a;
-  --bg-header: #12100a;
-  --bg-chip: #34281b;
-  --bg-chip-hover: #423322;
-  --bg-input: #100d08;
+body.theme-retro,
+body.theme-gruvbox {
+  --bg-desktop: #141108;
+  --bg-panel: #141108;
+  --bg-card: #1c170c;
+  --bg-card-hover: #241e10;
+  --bg-header: #171309;
+  --bg-chip: #292112;
+  --bg-chip-hover: #362c18;
+  --bg-input: #0e0c05;
 
-  --border-subtle: rgba(255, 176, 0, 0.14);
-  --border-card: rgba(255, 176, 0, 0.14);
-  --border-hover: #ffb000;
+  --border-subtle: #2d220a;
+  --border-card: #382b0e;
+  --border-hover: #ffb300;
+  --border-active: #ffb300;
 
-  --text-main: #ffd27a;
-  --text-sub: #e6a84d;
-  --text-dim: #996e33;
+  --text-main: #ffb300;
+  --text-sub: #cc8f00;
+  --text-dim: #704e00;
 
-  --accent-primary: #ffb000;
+  --accent-primary: #ffb300;
   --accent-cyan: #ffd269;
   --accent-blue: #ffaa00;
   --accent-mauve: #ff8800;
@@ -155,122 +165,39 @@ body.theme-retro {
   --accent-yellow: #ffb000;
 }
 
-/* Theme 4: Blueberry (Electric Midnight) */
+/* Theme 4: LilyGO T-Display Cyan (Ice Cyan Microcontroller Ink) */
+body.theme-eink-cyan,
 body.theme-blueberry,
 body.theme-modern,
-body.theme-frutiger {
-  --bg-desktop: #0b0f19;
-  --bg-panel: #0f172a;
-  --bg-card: #1e3a5f;
-  --bg-card-hover: #234570;
-  --bg-header: #0b1322;
-  --bg-chip: #274b79;
-  --bg-chip-hover: #315d96;
-  --bg-input: #0a1120;
+body.theme-frutiger,
+body.theme-nordic,
+body.theme-rosepine {
+  --bg-desktop: #0a1218;
+  --bg-panel: #0a1218;
+  --bg-card: #0f1b24;
+  --bg-card-hover: #142430;
+  --bg-header: #0d171f;
+  --bg-chip: #162836;
+  --bg-chip-hover: #1e3649;
+  --bg-input: #070e13;
 
-  --border-subtle: rgba(56, 189, 248, 0.14);
-  --border-card: rgba(56, 189, 248, 0.14);
-  --border-hover: #38bdf8;
+  --border-subtle: #142633;
+  --border-card: #1a3040;
+  --border-hover: #4dd0e1;
+  --border-active: #4dd0e1;
 
-  --text-main: #f0f6fc;
-  --text-sub: #94a3b8;
-  --text-dim: #64748b;
+  --text-main: #4dd0e1;
+  --text-sub: #268694;
+  --text-dim: #154850;
 
-  --accent-primary: #38bdf8;
-  --accent-cyan: #00f2fe;
+  --accent-primary: #4dd0e1;
+  --accent-cyan: #4dd0e1;
   --accent-blue: #38bdf8;
   --accent-mauve: #818cf8;
   --accent-green: #34d399;
   --accent-peach: #fb923c;
   --accent-red: #f87171;
   --accent-yellow: #fbbf24;
-}
-
-/* Theme 5: Rose Pine */
-body.theme-rosepine {
-  --bg-desktop: #191724;
-  --bg-panel: #1f1d2e;
-  --bg-card: #26233a;
-  --bg-card-hover: #2f2b48;
-  --bg-header: #191724;
-  --bg-chip: #363252;
-  --bg-chip-hover: #433e66;
-  --bg-input: #151320;
-
-  --border-subtle: rgba(235, 111, 146, 0.12);
-  --border-card: rgba(235, 111, 146, 0.12);
-  --border-hover: #eb6f92;
-
-  --text-main: #e0def4;
-  --text-sub: #908caa;
-  --text-dim: #6e6a86;
-
-  --accent-primary: #eb6f92;
-  --accent-cyan: #9ccfd8;
-  --accent-blue: #31748f;
-  --accent-mauve: #c4a7e7;
-  --accent-green: #9ccfd8;
-  --accent-peach: #f6c177;
-  --accent-red: #eb6f92;
-  --accent-yellow: #f6c177;
-}
-
-/* Theme 6: Gruvbox Material */
-body.theme-gruvbox {
-  --bg-desktop: #1d2021;
-  --bg-panel: #282828;
-  --bg-card: #3c3836;
-  --bg-card-hover: #45403e;
-  --bg-header: #1d2021;
-  --bg-chip: #504945;
-  --bg-chip-hover: #605753;
-  --bg-input: #191b1c;
-
-  --border-subtle: rgba(212, 190, 152, 0.12);
-  --border-card: rgba(212, 190, 152, 0.12);
-  --border-hover: #d4be98;
-
-  --text-main: #d4be98;
-  --text-sub: #a89984;
-  --text-dim: #7c6f64;
-
-  --accent-primary: #d4be98;
-  --accent-cyan: #89b482;
-  --accent-blue: #7daea3;
-  --accent-mauve: #d3869b;
-  --accent-green: #a9b665;
-  --accent-peach: #e78a4e;
-  --accent-red: #ea6962;
-  --accent-yellow: #d8a657;
-}
-
-/* Theme 7: Nordic Frost */
-body.theme-nordic {
-  --bg-desktop: #242933;
-  --bg-panel: #2e3440;
-  --bg-card: #3b4252;
-  --bg-card-hover: #434c5e;
-  --bg-header: #242933;
-  --bg-chip: #4c566a;
-  --bg-chip-hover: #58647a;
-  --bg-input: #1e222b;
-
-  --border-subtle: rgba(136, 192, 208, 0.14);
-  --border-card: rgba(136, 192, 208, 0.14);
-  --border-hover: #88c0d0;
-
-  --text-main: #eceff4;
-  --text-sub: #d8dee9;
-  --text-dim: #4c566a;
-
-  --accent-primary: #88c0d0;
-  --accent-cyan: #88c0d0;
-  --accent-blue: #81a1c1;
-  --accent-mauve: #b48ead;
-  --accent-green: #a3be8c;
-  --accent-peach: #d08770;
-  --accent-red: #bf616a;
-  --accent-yellow: #ebcb8b;
 }
 
 /* ==========================================================================
@@ -280,6 +207,9 @@ body.theme-nordic {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
 }
 
 html, body {
@@ -287,35 +217,37 @@ html, body {
   height: 100%;
   background-color: var(--bg-panel);
   color: var(--text-main);
-  font-family: var(--font-ui);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.45;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   user-select: none;
   overflow-x: hidden;
 }
 
-/* Ultra-lightweight Scrollbars */
+/* Minimalist Hardware Scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-subtle);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
-  border-radius: var(--radius-pill);
+  background: var(--border-card);
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-dim);
+  background: var(--text-main);
 }
 
 /* Typography Utility Hierarchy */
 .text-stat-large {
-  font-size: 28px;
+  font-family: var(--font-mono);
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1.1;
@@ -323,15 +255,17 @@ html, body {
 }
 
 .text-label-caps {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.6;
+  color: var(--text-dim);
 }
 
 .text-body {
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   font-weight: 400;
   color: var(--text-main);
 }
@@ -356,14 +290,14 @@ html, body {
 #widget-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 12px;
+  gap: 10px;
+  padding: 10px;
   width: 100%;
   contain: layout style;
 }
 
 /* ==========================================================================
-   5. NATIVE 44PX TOP BAR / HEADER (CLEAN SOLID, ZERO BLUR)
+   5. ESP32 40PX TOP BAR / HEADER (SOLID OPAQUE, ZERO BLUR)
    ========================================================================== */
 .hud-topbar,
 .hud-header,
@@ -372,12 +306,12 @@ html, body {
   height: var(--header-height);
   min-height: var(--header-height);
   background: var(--bg-header);
-  border-bottom: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-card);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
-  gap: 10px;
+  padding: 0 12px;
+  gap: 8px;
   width: 100%;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -392,20 +326,34 @@ html, body {
 .waybar-cluster {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* App Dot & Brand Tag */
+/* Crisp 8x8 Hardware Status Indicator */
 .hud-status-dot,
 .hud-dot,
 .arch-dot-pulse,
 .macos-dot-active {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
-  background-color: var(--accent-green);
+  border-radius: 1px;
+  background-color: var(--accent-primary);
+  border: 1px solid var(--border-card);
   display: inline-block;
   flex-shrink: 0;
+}
+
+/* ESP32 LOW-PWR Mode Badge */
+.hud-badge-esp32 {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-card);
+  color: var(--text-main);
+  text-transform: uppercase;
 }
 
 .hud-brand,
@@ -414,9 +362,10 @@ html, body {
 #header-brand-tag,
 .arch-brand-pill,
 .macos-brand-pill {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   color: var(--text-main);
   display: inline-flex;
   align-items: center;
@@ -424,85 +373,60 @@ html, body {
   background: transparent;
   border: none;
   padding: 0;
-}
-
-/* Spaces Dots */
-.workspaces-pill,
-.macos-spaces-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 2px 6px;
-  background: var(--bg-chip);
-  border-radius: var(--radius-pill);
-}
-
-.ws-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  transition: background-color var(--trans-fast);
-}
-
-.ws-dot.active {
-  width: 12px;
-  border-radius: var(--radius-pill);
-  background: var(--accent-primary);
+  text-transform: uppercase;
 }
 
 /* Header Buttons / Control Chips */
 .hud-icon-btn,
 .waybar-chip-btn,
 .macos-chip-btn {
-  height: 28px;
-  padding: 0 10px;
-  border-radius: var(--radius-sm);
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-xs);
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-sub);
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 500;
+  border: 1px solid var(--border-card);
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   outline: none;
-  transition: border-color var(--trans-fast), color var(--trans-fast), background-color var(--trans-fast);
+  transition: background-color var(--trans-instant), color var(--trans-instant);
 }
 
 .hud-icon-btn:hover,
 .waybar-chip-btn:hover,
 .macos-chip-btn:hover {
-  background: var(--bg-chip-hover);
-  border-color: var(--border-hover);
-  color: var(--text-main);
+  background: var(--text-main);
+  color: var(--bg-panel);
 }
 
 .hud-icon-btn:active,
 .waybar-chip-btn:active,
 .macos-chip-btn:active {
-  background: var(--bg-card);
+  background: var(--border-card);
+  color: var(--bg-panel);
 }
 
 /* Header Theme Dropdown Selector */
 .hud-select,
 .theme-dropdown-select,
 .macos-select {
-  height: 28px;
-  padding: 0 10px;
-  border-radius: var(--radius-sm);
+  height: 24px;
+  padding: 0 8px;
+  border-radius: var(--radius-xs);
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   color: var(--text-main);
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
   cursor: pointer;
   outline: none;
-  transition: border-color var(--trans-fast);
 }
 
 .hud-select:hover,
@@ -514,30 +438,28 @@ html, body {
 .hud-select option,
 .theme-dropdown-select option,
 .macos-select option {
-  background: var(--bg-panel);
+  background: var(--bg-card);
   color: var(--text-main);
 }
 
 /* ==========================================================================
-   6. WIDGET CARDS (RAYCAST STYLE SPECIFICATION)
+   6. E-INK WIDGET CARDS (PHYSICAL BEZEL FRAME SPECIFICATION)
    ========================================================================== */
 .widget-card {
   position: relative;
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-card);
-  padding: 16px;
+  padding: 12px 14px;
   box-shadow: var(--shadow-card);
   overflow: hidden;
   contain: layout style;
   content-visibility: auto;
   contain-intrinsic-size: 0 110px;
-  transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
 }
 
 .widget-card:hover {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 1px var(--accent-primary);
+  border-color: var(--border-hover);
 }
 
 .widget-inner-content {
@@ -548,33 +470,36 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed var(--border-subtle);
 }
 
 .widget-pill-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 500;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent-primary);
+  color: var(--text-main);
 }
 
 /* Edit Mode Delete Button */
 .widget-delete-btn {
   display: none;
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent-red);
-  color: #11111b;
-  border: none;
-  font-size: 11px;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-xs);
+  background: var(--border-card);
+  color: var(--bg-panel);
+  border: 1px solid var(--border-card);
+  font-size: 10px;
   font-weight: 700;
   cursor: pointer;
   z-index: 20;
@@ -587,24 +512,13 @@ html, body {
 }
 
 /* Widget Size Presets */
-.widget-size-compact {
-  padding: 12px 14px;
-}
-
-.widget-size-small {
-  padding: 14px;
-}
-
-.widget-size-medium {
-  padding: 16px;
-}
-
-.widget-size-large {
-  padding: 18px;
-}
+.widget-size-compact { padding: 8px 10px; }
+.widget-size-small { padding: 10px; }
+.widget-size-medium { padding: 12px 14px; }
+.widget-size-large { padding: 14px 16px; }
 
 /* ==========================================================================
-   7. CLOCK WIDGET (MACOS STANDBY / RAYCAST TYPOGRAPHIC)
+   7. CLOCK WIDGET (ESP32 SEGMENTED MONOSPACE TYPOGRAPHY)
    ========================================================================== */
 .caelestia-clock-widget {
   display: flex;
@@ -614,210 +528,154 @@ html, body {
 }
 
 .caelestia-clock-time {
-  font-size: 56px;
-  font-weight: 300;
-  letter-spacing: -1.5px;
+  font-family: var(--font-mono);
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -1px;
   color: var(--text-main);
   line-height: 1;
-  font-family: var(--font-ui);
 }
 
 .caelestia-clock-secs {
-  font-size: 22px;
-  font-weight: 400;
-  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-sub);
   margin-left: 2px;
-  vertical-align: baseline;
 }
 
 .caelestia-clock-meta {
   text-align: right;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .caelestia-date-chip {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent-primary);
+  color: var(--text-main);
 }
 
 .caelestia-day-chip {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 9px;
   color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 /* ==========================================================================
-   8. SYSTEM STATS & HARDWARE TELEMETRY WIDGET
+   8. STEPPED BLOCK HARDWARE TELEMETRY (MICROCONTROLLER LCD STYLE)
    ========================================================================== */
 .btop-telemetry-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .btop-metric-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .btop-metric-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-sub);
 }
 
 .btop-metric-val {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--text-main);
 }
 
-/* Standard Linear Progress Bar: 6px, No animations on track */
+/* Stepped Segmented Progress Track: 12px height with block divider */
 .btop-bar-track {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 3px;
+  height: 12px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
   overflow: hidden;
   position: relative;
 }
 
 .btop-bar-fill {
   height: 100%;
-  border-radius: 3px;
-  background: var(--accent-primary);
-  transition: width var(--trans-smooth);
+  background: var(--text-main);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 7px,
+    var(--bg-card) 7px,
+    var(--bg-card) 9px
+  );
+  transition: width var(--trans-fast);
 }
 
-.fill-cyan {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-}
-
-.fill-mauve {
-  background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan));
-}
-
+.fill-cyan,
+.fill-mauve,
 .fill-green {
-  background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+  background-color: var(--text-main);
 }
 
-/* Circular Gauge Visual Layout */
-.circular-gauges-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 6px 0;
-  gap: 12px;
-}
-
-.gauge-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  position: relative;
-}
-
-.gauge-svg {
-  width: 74px;
-  height: 74px;
-  transform: rotate(-90deg);
-}
-
-.gauge-bg {
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 6;
-  fill: none;
-}
-
-.gauge-fill {
-  stroke: var(--accent-primary);
-  stroke-width: 6;
-  fill: none;
-  stroke-linecap: round;
-  transition: stroke-dashoffset var(--trans-smooth);
-}
-
-.gauge-center-text {
-  position: absolute;
-  top: 18px;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-.gauge-pct {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.gauge-lbl {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-/* Compact Status Pill Cluster */
+/* Compact Status Pill Cluster (Waybar) */
 .caelestia-waybar-cluster {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
 }
 
 .cael-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 600;
   color: var(--text-main);
 }
 
-.chip-cyan { color: var(--accent-cyan); }
-.chip-mauve { color: var(--accent-mauve); }
-.chip-green { color: var(--accent-green); }
-.chip-peach { color: var(--accent-peach); }
+.chip-cyan, .chip-mauve, .chip-green, .chip-peach {
+  color: var(--text-main);
+}
 
 /* ==========================================================================
-   9. FISH TANK COMPANION HABITAT
+   9. PHYSICAL E-INK SCREEN BEZEL FISH TANK CONTAINER
    ========================================================================== */
 .caelestia-tank-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .caelestia-tank-viewport {
   position: relative;
   width: 100%;
-  height: 220px;
-  border-radius: var(--radius-card);
-  background: #0a1628;
-  border: 1px solid var(--border-subtle);
+  height: 200px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 2px solid var(--border-card);
   overflow: hidden;
-  cursor: pointer;
+  cursor: crosshair;
 }
 
 #fish-tank-canvas {
@@ -825,22 +683,23 @@ html, body {
   height: 100%;
   display: block;
   transform: translateZ(0);
-  will-change: transform;
 }
 
 .tank-prompt-sub {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 9px;
   color: var(--text-dim);
+  text-transform: uppercase;
 }
 
 /* ==========================================================================
-   10. DYNAMIC MUSIC PLAYER HUD (RAYCAST / LINEAR COMPACT)
+   10. MINIMALIST E-INK MEDIA CARD (TACTILE 1-BIT BUTTONS)
    ========================================================================== */
 .caelestia-music-card,
 .macos-music-card {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
 }
 
@@ -851,19 +710,20 @@ html, body {
 }
 
 .music-live-badge {
-  font-size: 10px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--text-dim);
   text-transform: uppercase;
 }
 
 .music-live-badge.badge-playing {
-  color: var(--accent-green);
+  color: var(--text-main);
 }
 
 .music-live-badge.badge-paused {
-  color: var(--accent-peach);
+  color: var(--text-sub);
 }
 
 .music-live-badge.badge-idle {
@@ -873,20 +733,20 @@ html, body {
 .music-main-body {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
-/* 64x64 Album Art Container */
+/* 56x56 Album Art Container with Crisp 1px Border */
 .music-album-art-wrap {
-  width: 64px;
-  height: 64px;
-  min-width: 64px;
-  min-height: 64px;
-  border-radius: 10px;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  border-radius: var(--radius-xs);
   overflow: hidden;
   position: relative;
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   flex-shrink: 0;
 }
 
@@ -895,17 +755,16 @@ html, body {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 10px;
 }
 
 .music-album-fallback {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #3730a3 0%, #6b21a8 100%);
+  background: var(--bg-chip);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--text-main);
 }
 
 .music-fallback-svg {
@@ -922,8 +781,9 @@ html, body {
 }
 
 .music-title-text {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -932,9 +792,9 @@ html, body {
 }
 
 .music-artist-text {
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   color: var(--text-sub);
-  opacity: 0.6;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -945,15 +805,15 @@ html, body {
 .music-controls {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .music-ctrl-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--border-subtle);
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-card);
   background: var(--bg-chip);
   color: var(--text-main);
   display: inline-flex;
@@ -962,27 +822,28 @@ html, body {
   cursor: pointer;
   outline: none;
   padding: 0;
-  transition: background-color var(--trans-fast), border-color var(--trans-fast);
+  transition: background-color var(--trans-instant), color var(--trans-instant);
 }
 
 .music-ctrl-btn:hover {
-  background: var(--bg-chip-hover);
-  border-color: var(--border-hover);
+  background: var(--text-main);
+  color: var(--bg-panel);
 }
 
 .music-play-btn {
-  width: 32px;
-  height: 32px;
-  background: var(--accent-primary);
-  color: #11111b;
-  border-color: transparent;
+  width: 28px;
+  height: 28px;
+  background: var(--text-main);
+  color: var(--bg-panel);
+  font-weight: 700;
 }
 
 .music-play-btn:hover {
-  background: var(--accent-cyan);
+  background: var(--border-card);
+  color: var(--bg-panel);
 }
 
-/* 3px Height Audio Progress Bar */
+/* Stepped Audio Progress Bar */
 .music-progress-section {
   width: 100%;
   margin-top: 4px;
@@ -990,35 +851,42 @@ html, body {
 
 .music-progress-bar {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
+  height: 6px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-card);
+  border-radius: 1px;
   overflow: hidden;
   position: relative;
 }
 
 .music-progress-fill {
   height: 100%;
-  background: var(--accent-primary);
-  border-radius: 2px;
-  transition: width var(--trans-smooth);
+  background: var(--text-main);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 5px,
+    var(--bg-card) 5px,
+    var(--bg-card) 7px
+  );
+  transition: width var(--trans-fast);
 }
 
 .music-time-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 .music-time-text {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-dim);
 }
 
 /* ==========================================================================
-   11. WEATHER CAPSULE & MULTI-DAY FORECAST
+   11. WEATHER CAPSULE (1-BIT / 2-BIT STEPPED TEMPERATURE)
    ========================================================================== */
 .caelestia-weather-card {
   display: flex;
@@ -1027,16 +895,18 @@ html, body {
 }
 
 .weather-temp-big {
-  font-size: 48px;
-  font-weight: 200;
+  font-family: var(--font-mono);
+  font-size: 38px;
+  font-weight: 700;
   letter-spacing: -1px;
   color: var(--text-main);
   line-height: 1;
 }
 
 .weather-loc-tag {
-  font-size: 11px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-sub);
@@ -1044,56 +914,19 @@ html, body {
 }
 
 .weather-condition-pill {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent-primary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
   text-align: right;
 }
 
 .weather-range-pill {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 9px;
   color: var(--text-dim);
   text-align: right;
   margin-top: 3px;
-}
-
-/* 3-Day Forecast Row Columns */
-.weather-forecast-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border-subtle);
-  gap: 8px;
-}
-
-.forecast-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-
-.forecast-day {
-  font-size: 10px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-dim);
-}
-
-.forecast-icon {
-  font-size: 16px;
-}
-
-.forecast-temp {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-main);
 }
 
 /* ==========================================================================
@@ -1103,35 +936,34 @@ html, body {
 .caelestia-macro-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 6px;
 }
 
 .caelestia-macro-btn {
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 10px 4px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
+  padding: 8px 4px;
   color: var(--text-main);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   cursor: pointer;
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
   outline: none;
-  transition: background-color var(--trans-fast), border-color var(--trans-fast), color var(--trans-fast);
+  transition: background-color var(--trans-instant), color var(--trans-instant);
 }
 
 .caelestia-macro-btn:hover {
-  background: var(--bg-chip-hover);
-  border-color: var(--border-hover);
-  color: var(--accent-primary);
+  background: var(--text-main);
+  color: var(--bg-panel);
 }
 
 .macro-icon {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* AI Model Rotator */
@@ -1142,16 +974,18 @@ html, body {
 }
 
 .rotator-name-label {
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
   color: var(--text-main);
   margin-top: 2px;
 }
 
 /* Pomodoro Timer */
 .pomo-time-display {
-  font-size: 32px;
-  font-weight: 300;
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
   color: var(--text-main);
   line-height: 1.1;
 }
@@ -1161,29 +995,28 @@ html, body {
   width: 100%;
   height: 80px;
   background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
+  padding: 8px 10px;
   color: var(--text-main);
-  font-family: var(--font-ui);
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
   line-height: 1.4;
   resize: none;
   outline: none;
-  transition: border-color var(--trans-fast);
 }
 
 .caelestia-notes-box:focus {
-  border-color: var(--accent-primary);
+  border-color: var(--border-hover);
 }
 
 /* ==========================================================================
-   13. CONTROL CENTER: ROOT, TABS & CARDS (MACOS / LINEAR DASHBOARD)
+   13. CONTROL CENTER: ROOT, TABS & CARDS
    ========================================================================== */
 .cc-wrapper,
 .cc-root {
   min-height: 100vh;
-  padding: 24px 28px;
+  padding: 20px 24px;
   background: var(--bg-panel);
   color: var(--text-main);
   display: flex;
@@ -1197,32 +1030,34 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-card);
 }
 
 .cc-brand-title {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .cc-title {
-  font-size: 18px;
+  font-family: var(--font-mono);
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   color: var(--text-main);
 }
 
 .cc-version {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
   background: var(--bg-chip);
   color: var(--text-sub);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
 }
 
 /* Clean Solid Segmented Navigation Bar */
@@ -1230,30 +1065,30 @@ html, body {
 .cc-tabs {
   display: flex;
   gap: 4px;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
   background: var(--bg-header);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 4px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
+  padding: 3px;
 }
 
 .cc-tab-btn,
 .cc-tab {
   flex: 1;
-  padding: 8px 14px;
+  padding: 6px 12px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   color: var(--text-sub);
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: color var(--trans-fast), background-color var(--trans-fast), border-color var(--trans-fast);
+  gap: 6px;
+  transition: color var(--trans-instant), background-color var(--trans-instant);
 }
 
 .cc-tab-btn:hover,
@@ -1266,7 +1101,7 @@ html, body {
 .cc-tab.active {
   background: var(--bg-card);
   color: var(--text-main);
-  border-color: var(--border-subtle);
+  border-color: var(--border-card);
 }
 
 /* Tab Panels */
@@ -1285,34 +1120,37 @@ html, body {
 .cc-grid-2col {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* Control Center Cards */
 .cc-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-card);
-  padding: 20px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
+  padding: 16px;
   box-shadow: var(--shadow-card);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .cc-card-title {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.2px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text-main);
   margin-bottom: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  text-transform: uppercase;
 }
 
 .cc-card-desc {
-  font-size: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   color: var(--text-dim);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   line-height: 1.4;
 }
 
@@ -1321,63 +1159,63 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   color: var(--text-main);
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
   cursor: pointer;
   outline: none;
-  transition: background-color var(--trans-fast), border-color var(--trans-fast);
+  transition: background-color var(--trans-instant), color var(--trans-instant);
 }
 
 .cc-btn:hover {
-  background: var(--bg-chip-hover);
-  border-color: var(--border-hover);
+  background: var(--text-main);
+  color: var(--bg-panel);
 }
 
 .cc-btn-primary {
-  background: var(--accent-primary);
-  color: #11111b;
-  font-weight: 600;
-  border-color: transparent;
+  background: var(--text-main);
+  color: var(--bg-panel);
+  font-weight: 700;
 }
 
 .cc-btn-primary:hover {
-  background: var(--accent-cyan);
-  border-color: transparent;
+  background: var(--border-card);
+  color: var(--bg-panel);
 }
 
 .cc-btn-danger {
   background: var(--bg-chip);
   color: var(--accent-red);
-  border-color: rgba(243, 139, 168, 0.25);
+  border-color: var(--border-card);
 }
 
 .cc-btn-danger:hover {
-  background: rgba(243, 139, 168, 0.15);
-  border-color: var(--accent-red);
+  background: var(--accent-red);
+  color: var(--bg-panel);
 }
 
 /* Form Inputs & Selects */
 .cc-input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .cc-label {
-  font-size: 11px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-sub);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   display: block;
 }
 
@@ -1385,54 +1223,54 @@ html, body {
 .cc-text-input {
   width: 100%;
   background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   color: var(--text-main);
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 12px;
-  font-family: var(--font-ui);
+  padding: 6px 10px;
+  border-radius: var(--radius-xs);
+  font-size: 11px;
+  font-family: var(--font-mono);
   outline: none;
-  transition: border-color var(--trans-fast);
 }
 
 .cc-select:focus,
 .cc-text-input:focus {
-  border-color: var(--accent-primary);
+  border-color: var(--border-hover);
 }
 
 .cc-select option {
-  background: var(--bg-panel);
+  background: var(--bg-card);
   color: var(--text-main);
 }
 
-/* Standard Range Slider */
+/* Range Slider */
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 4px;
   background: var(--bg-chip);
-  border-radius: 2px;
+  border: 1px solid var(--border-card);
+  border-radius: 1px;
   outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--accent-primary);
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-xs);
+  background: var(--text-main);
   cursor: pointer;
-  border: 2px solid var(--bg-panel);
+  border: 1px solid var(--border-card);
 }
 
-/* iOS Toggle Switch */
+/* Hardware Toggle Switch */
 .ios-switch {
   position: relative;
   display: inline-block;
-  width: 38px;
-  height: 22px;
+  width: 34px;
+  height: 18px;
 }
 
 .ios-switch input {
@@ -1449,53 +1287,50 @@ input[type="range"]::-webkit-slider-thumb {
   right: 0;
   bottom: 0;
   background-color: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
-  transition: background-color var(--trans-fast), border-color var(--trans-fast);
-  border-radius: 22px;
+  border: 1px solid var(--border-card);
+  border-radius: 2px;
 }
 
 .switch-slider:before {
   position: absolute;
   content: "";
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  bottom: 3px;
-  background-color: #ffffff;
-  transition: transform var(--trans-fast);
-  border-radius: 50%;
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--text-main);
+  border-radius: 1px;
 }
 
 input:checked + .switch-slider {
-  background-color: var(--accent-primary);
-  border-color: var(--accent-primary);
+  background-color: var(--text-main);
+  border-color: var(--border-card);
 }
 
 input:checked + .switch-slider:before {
   transform: translateX(16px);
-  background-color: #11111b;
+  background-color: var(--bg-panel);
 }
 
 /* ==========================================================================
    14. CONTROL CENTER: MONITOR MAP, THEMES GALLERY & WIDGET PICKER
    ========================================================================== */
-/* Monitor Placement Canvas Map */
 .monitor-map-view {
   width: 100%;
-  height: 130px;
+  height: 120px;
   background: var(--bg-input);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xs);
+  border: 1px dashed var(--border-card);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .map-box {
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   background: var(--bg-chip);
   border-radius: var(--radius-xs);
   position: absolute;
@@ -1503,61 +1338,60 @@ input:checked + .switch-slider:before {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 9px;
+  font-weight: 700;
   color: var(--text-main);
   cursor: pointer;
-  transition: border-color var(--trans-fast);
 }
 
 .map-box.active {
-  border-color: var(--accent-primary);
-  background: var(--bg-card);
-  color: #ffffff;
+  border-color: var(--border-card);
+  background: var(--text-main);
+  color: var(--bg-panel);
 }
 
 /* Dock Mode Grid */
 .cc-dock-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .cc-dock-card {
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   background: var(--bg-chip);
-  padding: 14px 10px;
-  border-radius: var(--radius-sm);
+  padding: 10px 8px;
+  border-radius: var(--radius-xs);
   text-align: center;
   cursor: pointer;
-  transition: border-color var(--trans-fast), background-color var(--trans-fast);
 }
 
 .cc-dock-card:hover {
-  border-color: var(--border-hover);
   background: var(--bg-chip-hover);
 }
 
 .cc-dock-card.active {
-  border-color: var(--accent-primary);
-  background: var(--bg-card);
+  background: var(--text-main);
+  color: var(--bg-panel);
+}
+.cc-dock-card.active div {
+  color: var(--bg-panel) !important;
 }
 
 /* Themes Showcase Gallery */
 .omarchy-theme-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  gap: 12px;
 }
 
 .omarchy-theme-card {
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
   background: var(--bg-card);
-  border-radius: var(--radius-card);
-  padding: 16px;
+  border-radius: var(--radius-xs);
+  padding: 14px;
   cursor: pointer;
-  transition: border-color var(--trans-fast);
   position: relative;
 }
 
@@ -1566,17 +1400,17 @@ input:checked + .switch-slider:before {
 }
 
 .omarchy-theme-card.active {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 1px var(--accent-primary);
+  border-width: 2px;
+  border-color: var(--text-main);
+  box-shadow: 2px 2px 0 var(--border-card);
 }
 
 .theme-swatch-row {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   height: 10px;
-  margin-top: 10px;
-  border-radius: var(--radius-pill);
-  overflow: hidden;
+  margin-top: 8px;
+  border: 1px solid var(--border-card);
 }
 
 .theme-swatch {
@@ -1587,7 +1421,7 @@ input:checked + .switch-slider:before {
 .widget-picker-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   max-height: 380px;
   overflow-y: auto;
   padding-right: 4px;
@@ -1598,35 +1432,35 @@ input:checked + .switch-slider:before {
   align-items: center;
   justify-content: space-between;
   background: var(--bg-chip);
-  border: 1px solid var(--border-subtle);
-  padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  transition: border-color var(--trans-fast), background-color var(--trans-fast);
+  border: 1px solid var(--border-card);
+  padding: 8px 12px;
+  border-radius: var(--radius-xs);
 }
 
 .widget-picker-item:hover {
   background: var(--bg-chip-hover);
-  border-color: var(--border-hover);
 }
 
 .widget-item-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .widget-item-icon {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .widget-item-name {
-  font-size: 13px;
-  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
   color: var(--text-main);
 }
 
 .widget-item-cat {
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 9px;
   color: var(--text-dim);
 }
 
@@ -1639,15 +1473,14 @@ video,
   transform: translateZ(0);
 }
 
-/* Video Preview Container */
 .video-preview-box {
   width: 100%;
-  height: 260px;
+  height: 240px;
   background: #000000;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   overflow: hidden;
   position: relative;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-card);
 }
 
 #cc-video-preview {
@@ -1662,7 +1495,8 @@ video,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 12px;
+  font-size: 11px;
+  font-family: var(--font-mono);
   color: var(--text-dim);
   text-align: center;
 }
@@ -1670,13 +1504,11 @@ video,
 /* ==========================================================================
    16. PERFORMANCE GUARDS & ACCESSIBILITY
    ========================================================================== */
-/* Strictly enforce NO backdrop-filter across all selectors */
 *, *::before, *::after {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
 
-/* Reduce Motion Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;

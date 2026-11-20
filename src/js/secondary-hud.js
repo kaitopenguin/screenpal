@@ -11,15 +11,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Config fetch error:', err);
   }
 
-  // 1. Theme Management (7 Visual Themes)
-  const validThemes = ['catppuccin', 'tokyonight', 'amberbyte', 'blueberry', 'rosepine', 'gruvbox', 'nordic'];
+  // 1. Theme Management (E-Ink & Legacy Themes)
+  const validThemes = [
+    'eink-paper', 'eink-dark', 'eink-amber', 'eink-cyan',
+    'catppuccin', 'tokyonight', 'amberbyte', 'blueberry', 'rosepine', 'gruvbox', 'nordic'
+  ];
   function applyTheme(themeName) {
     // Map legacy names if any
-    let active = themeName;
+    let active = (themeName || '').replace(/^theme-/, '');
     if (active === 'arch') active = 'catppuccin';
     if (active === 'retro') active = 'amberbyte';
     if (active === 'modern' || active === 'frutiger') active = 'blueberry';
-    if (!validThemes.includes(active)) active = 'catppuccin';
+    if (!validThemes.includes(active)) active = 'eink-paper';
 
     document.body.className = `theme-${active}`;
 
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const brandTag = document.getElementById('header-brand-tag');
     if (brandTag) {
-      brandTag.textContent = '✦ SCREENPAL';
+      brandTag.textContent = active.startsWith('eink') ? 'ESP32 // E-INK' : '✦ SCREENPAL';
     }
   }
   applyTheme(config.theme || 'catppuccin');
@@ -264,23 +267,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  async function pollMediaSession() {
+  // 8. Windows Media Session: Safe One-Shot Non-Spawning Profile
+  async function refreshMediaSession(explicit = false) {
     try {
-      const getMedia = (window.electronAPI && window.electronAPI.getMediaSession)
-        ? window.electronAPI.getMediaSession
-        : (window.api && window.api.getMediaSession ? window.api.getMediaSession : null);
-      if (getMedia) {
-        const media = await getMedia();
-        updateMusicWidget(media);
+      let media = null;
+      if (explicit) {
+        const refreshFn = (window.api && window.api.refreshMedia)
+          ? window.api.refreshMedia
+          : ((window.electronAPI && window.electronAPI.refreshMedia) ? window.electronAPI.refreshMedia : null);
+        if (refreshFn) {
+          media = await refreshFn();
+        } else if (window.api && window.api.getMediaSession) {
+          media = await window.api.getMediaSession();
+        }
+      } else {
+        const getFn = (window.api && window.api.getMediaSession)
+          ? window.api.getMediaSession
+          : ((window.electronAPI && window.electronAPI.getMediaSession) ? window.electronAPI.getMediaSession : null);
+        if (getFn) {
+          media = await getFn();
+        }
       }
+      updateMusicWidget(media);
     } catch (err) {
-      console.warn('Error polling media session:', err);
+      console.warn('Error fetching media session:', err);
     }
   }
 
-  window.refreshMediaSession = pollMediaSession;
+  // Globally exposed handler for explicit user clicks (controls, refresh badge)
+  window.refreshMediaSession = () => refreshMediaSession(true);
 
-  // Poll immediately on load, then poll every 2500ms
-  pollMediaSession();
-  setInterval(pollMediaSession, 2500);
+  // Passive initial check from memory cache (zero process spawn)
+  refreshMediaSession(false);
+
+  // Passive push listener from main process
+  if (window.api && window.api.onMediaUpdate) {
+    window.api.onMediaUpdate((media) => {
+      updateMusicWidget(media);
+    });
+  }
+
+  // Allow clicking music badge/header to trigger explicit manual refresh
+  document.addEventListener('click', (e) => {
+    if (e.target && (e.target.id === 'music-status-badge' || e.target.closest?.('#music-status-badge') || e.target.classList?.contains?.('music-card-header'))) {
+      window.refreshMediaSession();
+    }
+  });
 });
