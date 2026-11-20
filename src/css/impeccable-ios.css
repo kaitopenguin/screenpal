@@ -1,13 +1,12 @@
 /* ==========================================================================
-   CAELESTIA SHELL & OMARCHY RICING DESIGN SYSTEM (ARCH LINUX / HYPRLAND)
-   Inspired by: Caelestia Shell (Quickshell / Hyprland) & Omarchy 7 Themes
-   Ultra-clean, minimalist, floating island panels, buttery smooth 60fps
+   SCREENPAL DESIGN SYSTEM (MACOS SONOMA & IOS 18 SPEC)
+   Ultra-clean, minimalist, glassmorphic floating panels, buttery smooth 60fps
    ========================================================================== */
 
 /* 1. Base Variables & Common Reset */
 :root {
-  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono", monospace;
+  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", "Cascadia Code", monospace;
 
   /* Global Animations */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -29,7 +28,7 @@
   --shadow-elevation: 0 12px 36px -4px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.25);
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
 
-  /* Default Theme: Catppuccin Sherbet (Omarchy) */
+  /* Default Theme: Catppuccin Sherbet */
   --bg-desktop: #11111b;
   --bg-panel: rgba(24, 24, 37, 0.88);
   --bg-card: rgba(30, 30, 46, 0.75);
@@ -53,7 +52,7 @@
 }
 
 /* ==========================================================================
-   2. 7 OMARCHY & ARCH LINUX RICING THEMES
+   2. 7 CURATED COLOR PALETTES & THEMES
    ========================================================================== */
 
 /* Theme 1: Catppuccin Sherbet (Default) */
@@ -239,7 +238,7 @@ body {
 }
 
 /* ==========================================================================
-   4. CAELESTIA FLOATING ISLAND HUD (SECONDARY SCREEN)
+   4. FLOATING ISLAND HUD (SECONDARY SCREEN)
    ========================================================================== */
 .caelestia-hud-frame {
   position: relative;
@@ -256,18 +255,21 @@ body {
   border-right: 1px solid var(--border-card);
 }
 
-/* Top Floating Waybar Pill Island */
-.caelestia-waybar-island {
+/* Top Floating Menu Bar / Status Island */
+.caelestia-waybar-island, .macos-menubar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
+  background: rgba(30, 30, 46, 0.72);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-pill);
-  padding: 6px 14px;
-  box-shadow: var(--shadow-elevation);
+  padding: 7px 16px;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), 0 12px 32px rgba(0, 0, 0, 0.4);
   gap: 8px;
   flex-wrap: wrap;
+  transition: all var(--trans-fast);
 }
 
 .waybar-cluster {
@@ -276,43 +278,47 @@ body {
   gap: 6px;
 }
 
-/* Arch Logo Pill */
-.arch-brand-pill {
+/* Status Pill & Dot */
+.arch-brand-pill, .macos-brand-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(137, 220, 235, 0.12);
-  border: 1px solid rgba(137, 220, 235, 0.35);
-  color: var(--accent-cyan);
-  padding: 3px 10px;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 8px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+  padding: 4px 12px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.04em;
+  transition: all var(--trans-fast);
 }
 
-.arch-dot-pulse {
+.arch-dot-pulse, .macos-dot-active {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 10px var(--accent-cyan);
-  animation: arch-pulse 2.4s infinite ease-in-out;
+  background: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.8), 0 0 2px #34d399;
+  animation: macos-pulse 2.5s infinite ease-in-out;
 }
-@keyframes arch-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.8); }
+@keyframes macos-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(52, 211, 153, 0.8); }
+  50% { opacity: 0.55; transform: scale(0.85); box-shadow: 0 0 4px rgba(52, 211, 153, 0.3); }
 }
 
-/* Hyprland Workspace Indicators */
-.workspaces-pill {
+/* Spaces Indicator */
+.workspaces-pill, .macos-spaces-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  background: var(--bg-chip);
-  border: 1px solid var(--border-card);
-  padding: 2px 6px;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
 }
 .ws-dot {
@@ -325,43 +331,56 @@ body {
 .ws-dot.active {
   width: 14px;
   border-radius: var(--radius-pill);
-  background: var(--accent-mauve);
-  box-shadow: 0 0 8px var(--accent-mauve);
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--glow-accent);
 }
 
-/* Quick Action Chips */
-.waybar-chip-btn {
-  background: var(--bg-chip);
-  border: 1px solid var(--border-card);
+/* macOS Quick Action Chips */
+.waybar-chip-btn, .macos-chip-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-main);
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   transition: all var(--trans-fast);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
-.waybar-chip-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
+.waybar-chip-btn:hover, .macos-chip-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.theme-dropdown-select {
-  background: var(--bg-chip);
-  border: 1px solid var(--border-card);
+.theme-dropdown-select, .macos-select {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-main);
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
   outline: none;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all var(--trans-fast);
+}
+.theme-dropdown-select:hover, .macos-select:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 .theme-dropdown-select option {
   background: #11111b;
@@ -369,7 +388,7 @@ body {
 }
 
 /* ==========================================================================
-   5. CAELESTIA MODULAR WIDGET CARDS
+   5. MODULAR WIDGET CARDS
    ========================================================================== */
 .caelestia-widget-list {
   display: flex;
@@ -380,16 +399,19 @@ body {
 
 .widget-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
+  background: rgba(30, 30, 46, 0.7);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.12), 0 10px 30px -5px rgba(0, 0, 0, 0.4);
   padding: 16px;
-  transition: border-color var(--trans-smooth), transform var(--trans-fast);
+  transition: border-color var(--trans-smooth), transform var(--trans-fast), box-shadow var(--trans-fast);
   overflow: hidden;
 }
 .widget-card:hover {
-  border-color: var(--border-card-hover);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18), 0 14px 36px -4px rgba(0, 0, 0, 0.45);
 }
 
 .widget-card-header {
@@ -434,10 +456,10 @@ body {
 }
 
 /* ==========================================================================
-   6. WIDGET COMPONENT DESIGNS (CAELESTIA SPEC)
+   6. WIDGET COMPONENT DESIGNS
    ========================================================================== */
 
-/* A. Arch Linux Waybar Status Pill Card */
+/* A. Compact Status Pill Card */
 .caelestia-waybar-cluster {
   display: flex;
   align-items: center;
@@ -463,7 +485,7 @@ body {
 .chip-green { color: var(--accent-green); border-color: rgba(166, 227, 161, 0.3); }
 .chip-peach { color: var(--accent-peach); border-color: rgba(250, 179, 135, 0.3); }
 
-/* B. Caelestia Aesthetic Clock & Date */
+/* B. Clock & Date */
 .caelestia-clock-widget {
   display: flex;
   align-items: center;
@@ -571,36 +593,88 @@ body {
 .fill-mauve { background: linear-gradient(90deg, #a855f7, var(--accent-mauve)); }
 .fill-green { background: linear-gradient(90deg, #10b981, var(--accent-green)); }
 
-/* E. Caelestia Music Player with Cava Spectrum */
+/* E. macOS Glass Music Player HUD (Windows Media Session) */
 .caelestia-music-card {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
-.music-album-art {
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-sm);
-  background: radial-gradient(circle, #222 30%, #000 70%);
+.music-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.music-live-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  transition: color var(--trans-fast);
+}
+.music-live-badge.badge-playing {
+  color: var(--accent-green);
+}
+.music-live-badge.badge-paused {
+  color: var(--accent-peach, #fb923c);
+}
+.music-live-badge.badge-idle {
+  color: var(--text-dim);
+}
+
+.music-main-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.music-album-art-wrap {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  min-height: 60px;
+  border-radius: var(--radius-sm, 10px);
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-card);
-  box-shadow: 0 4px 16px var(--glow-accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.music-album-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius-sm, 10px);
+}
+
+.music-album-fallback {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  animation: spin 10s linear infinite;
+  color: #ffffff;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-.music-center-dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--accent-cyan);
+
+.music-fallback-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  opacity: 0.9;
 }
+
 .music-info-meta {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
 .music-title-text {
   font-size: 13px;
   font-weight: 700;
@@ -608,23 +682,96 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--text-main);
+  line-height: 1.3;
 }
+
 .music-artist-text {
   font-size: 11px;
   color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  line-height: 1.2;
 }
-.cava-spectrum-strip {
+
+.music-controls {
   display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 16px;
+  align-items: center;
+  gap: 8px;
   margin-top: 6px;
 }
-.spectrum-bar {
-  width: 3px;
+
+.music-ctrl-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-card);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  color: var(--text-main);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--trans-fast, 0.15s ease);
+  padding: 0;
+}
+.music-ctrl-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: var(--border-card-hover);
+  transform: scale(1.08);
+}
+.music-ctrl-btn:active {
+  transform: scale(0.94);
+}
+
+.music-play-btn {
+  width: 30px;
+  height: 30px;
   background: var(--accent-cyan);
-  border-radius: 1px;
-  transition: height 0.08s ease;
+  color: #0d1117;
+  border-color: transparent;
+  box-shadow: 0 2px 10px var(--glow-accent);
+}
+.music-play-btn:hover {
+  background: #5eead4;
+  transform: scale(1.1);
+}
+
+.music-progress-section {
+  width: 100%;
+  margin-top: 2px;
+}
+
+.music-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.music-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-cyan, #06b6d4), var(--accent-mauve, #c084fc));
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.music-time-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.music-time-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
 }
 
 /* F. Dynamic Weather Capsule */
@@ -722,7 +869,7 @@ body {
 }
 
 /* ==========================================================================
-   7. CONTROL CENTER DASHBOARD (CAELESTIA SHELL STYLE)
+   7. CONTROL CENTER DASHBOARD (MACOS STYLE)
    ========================================================================== */
 .cc-wrapper {
   padding: 24px 28px;
@@ -748,26 +895,28 @@ body {
   color: #fff;
 }
 
-/* Clean Floating Tabs */
+/* Clean Floating macOS Segmented Tabs */
 .cc-nav-tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 22px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-md);
-  padding: 6px;
+  background: rgba(20, 20, 32, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 5px;
 }
 .cc-tab-btn {
   flex: 1;
-  padding: 10px 14px;
+  padding: 9px 14px;
   background: transparent;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   color: var(--text-sub);
   font-family: var(--font-ui);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -777,13 +926,13 @@ body {
 }
 .cc-tab-btn:hover {
   color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
 }
 .cc-tab-btn.active {
-  background: var(--bg-card);
-  color: var(--accent-cyan);
-  border: 1px solid var(--border-card);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .cc-panel {
@@ -805,11 +954,13 @@ body {
 }
 
 .cc-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
-  border-radius: var(--radius-md);
+  background: rgba(30, 30, 46, 0.72);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
   padding: 20px;
-  box-shadow: var(--shadow-card);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.35);
   margin-bottom: 20px;
 }
 .cc-card-title {
@@ -928,7 +1079,7 @@ body {
   box-shadow: 0 0 16px var(--glow-accent);
 }
 
-/* Omarchy Themes Gallery */
+/* Themes Gallery */
 .omarchy-theme-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

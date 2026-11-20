@@ -1,7 +1,7 @@
 /**
  * WIDGET MANAGEMENT ENGINE
  * Complete widget catalog, customization, sizing, and dynamic rendering.
- * Inspired by iOS 18, macOS Sonoma, Android Material You, and Arch Linux Waybar.
+ * Inspired by iOS 18, macOS Sonoma, and modern desktop widgets.
  */
 
 const WIDGET_CATALOG = [
@@ -34,10 +34,10 @@ const WIDGET_CATALOG = [
   },
   {
     id: 'arch-waybar-status',
-    name: 'Arch Linux Waybar Status Pill',
+    name: 'Compact Status Pill',
     category: 'Telemetry Pill',
-    description: 'Ultra-dense minimalist status pill inspired by Hyprland and Waybar.',
-    icon: '🐧',
+    description: 'Ultra-dense minimalist status pill with live CPU, RAM, network, and storage indicators.',
+    icon: '📊',
     defaultSize: 'compact',
     sizesAvailable: ['compact'],
   },
@@ -52,9 +52,9 @@ const WIDGET_CATALOG = [
   },
   {
     id: 'dynamic-music',
-    name: 'Dynamic Island Music HUD',
+    name: 'Dynamic Music Player',
     category: 'Media & Audio',
-    description: 'Spinning vinyl record player with live dynamic audio spectrum equalizer.',
+    description: 'Windows Media Session player with live album art, progress bar, and playback controls.',
     icon: '🎵',
     defaultSize: 'medium',
     sizesAvailable: ['medium'],
@@ -211,7 +211,7 @@ class WidgetManager {
             </div>
             <div class="caelestia-clock-meta">
               <div class="caelestia-date-chip" id="ios-date-string">WEDNESDAY, NOV 20</div>
-              <div class="caelestia-day-chip">ARCH LINUX DESKTOP</div>
+              <div class="caelestia-day-chip">SECONDARY DISPLAY</div>
             </div>
           </div>
         `;
@@ -221,7 +221,7 @@ class WidgetManager {
         wrapper.innerHTML = `
           <div class="btop-telemetry-container">
             <div class="widget-card-header">
-              <span class="widget-pill-badge">󰻠 HARDWARE // BTOP</span>
+              <span class="widget-pill-badge">⚡ HARDWARE TELEMETRY</span>
               <span style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-green);">● LIVE</span>
             </div>
             <div class="btop-metric-row">
@@ -258,7 +258,7 @@ class WidgetManager {
       case 'arch-waybar-status':
         wrapper.innerHTML = `
           <div class="caelestia-waybar-cluster">
-            <span class="cael-chip chip-cyan">󰣇 ARCH</span>
+            <span class="cael-chip chip-cyan">● STATUS</span>
             <span class="cael-chip" id="wb-cpu"> 14%</span>
             <span class="cael-chip chip-mauve" id="wb-mem">󰍛 8.4G</span>
             <span class="cael-chip chip-green" id="wb-net">󰖩 ▲24K ▼140K</span>
@@ -284,14 +284,55 @@ class WidgetManager {
 
       case 'dynamic-music':
         wrapper.innerHTML = `
-          <div class="caelestia-music-card">
-            <div class="music-album-art">
-              <div class="music-center-dot"></div>
+          <div class="caelestia-music-card macos-music-card">
+            <div class="music-card-header">
+              <span class="widget-pill-badge">󰎈 NOW PLAYING</span>
+              <span id="music-status-badge" class="music-live-badge badge-idle">● IDLE</span>
             </div>
-            <div class="music-info-meta">
-              <div class="music-title-text">Lofi Synthwave Sunset</div>
-              <div class="music-artist-text">Caelestia Ambient · Arch Linux Radio</div>
-              <div class="cava-spectrum-strip" id="music-spectrum-bars"></div>
+            <div class="music-main-body">
+              <div class="music-album-art-wrap" id="music-art-wrap">
+                <img id="music-album-img" class="music-album-img" src="" alt="Album Art" style="display: none;" />
+                <div id="music-album-fallback" class="music-album-fallback">
+                  <svg class="music-fallback-svg" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                  </svg>
+                </div>
+              </div>
+              <div class="music-info-meta">
+                <div class="music-title-text" id="music-title" title="No media playing">No Media Playing</div>
+                <div class="music-artist-text" id="music-artist">Windows Media Session</div>
+                <div class="music-controls">
+                  <button class="music-ctrl-btn" id="btn-music-prev" title="Previous Track" aria-label="Previous Track">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                      <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
+                  </button>
+                  <button class="music-ctrl-btn music-play-btn" id="btn-music-play" title="Play/Pause" aria-label="Play or Pause">
+                    <svg id="music-play-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg id="music-pause-icon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="display: none;">
+                      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                  </button>
+                  <button class="music-ctrl-btn" id="btn-music-next" title="Next Track" aria-label="Next Track">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor">
+                      <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="music-progress-section">
+              <div class="music-progress-bar">
+                <div class="music-progress-fill" id="music-progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="music-time-row">
+                <span class="music-time-text" id="music-current-time">0:00</span>
+                <span class="music-time-text" id="music-total-time">0:00</span>
+              </div>
             </div>
           </div>
         `;
@@ -312,9 +353,9 @@ class WidgetManager {
               <span class="macro-icon">🐟</span>
               <span>Feed Fish</span>
             </button>
-            <button class="caelestia-macro-btn" onclick="window.open('https://reddit.com/r/unixporn')">
-              <span class="macro-icon">󰈹</span>
-              <span>r/unixporn</span>
+            <button class="caelestia-macro-btn" onclick="window.api?.openControlCenter ? window.api.openControlCenter() : null">
+              <span class="macro-icon">⚙️</span>
+              <span>Settings</span>
             </button>
           </div>
         `;
@@ -383,7 +424,40 @@ class WidgetManager {
       }
     }
 
-    // 2. Initialize spectrum bars if present
+    // 2. Initialize Music Player Controls
+    const btnPlay = document.getElementById('btn-music-play');
+    const btnPrev = document.getElementById('btn-music-prev');
+    const btnNext = document.getElementById('btn-music-next');
+
+    const controlApi = (window.electronAPI && window.electronAPI.controlMediaSession)
+      ? window.electronAPI.controlMediaSession
+      : (window.api && window.api.controlMediaSession ? window.api.controlMediaSession : null);
+
+    if (controlApi) {
+      if (btnPlay) {
+        btnPlay.onclick = async (e) => {
+          e.stopPropagation();
+          await controlApi('playpause');
+          if (window.refreshMediaSession) window.refreshMediaSession();
+        };
+      }
+      if (btnPrev) {
+        btnPrev.onclick = async (e) => {
+          e.stopPropagation();
+          await controlApi('previous');
+          if (window.refreshMediaSession) window.refreshMediaSession();
+        };
+      }
+      if (btnNext) {
+        btnNext.onclick = async (e) => {
+          e.stopPropagation();
+          await controlApi('next');
+          if (window.refreshMediaSession) window.refreshMediaSession();
+        };
+      }
+    }
+
+    // 3. Initialize spectrum bars if present
     const specContainer = document.getElementById('music-spectrum-bars');
     if (specContainer) {
       specContainer.innerHTML = '';

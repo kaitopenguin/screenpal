@@ -1,6 +1,6 @@
 /**
- * CAELESTIA SHELL - SECONDARY HUD CONTROLLER
- * Hyprland floating island design, Omarchy 7 themes, Btop telemetry, zero-lag 60fps.
+ * SCREENPAL - SECONDARY HUD CONTROLLER
+ * macOS floating island design, 7 visual themes, zero-lag 60fps telemetry.
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Config fetch error:', err);
   }
 
-  // 1. Theme Management (7 Omarchy Themes)
+  // 1. Theme Management (7 Visual Themes)
   const validThemes = ['catppuccin', 'tokyonight', 'amberbyte', 'blueberry', 'rosepine', 'gruvbox', 'nordic'];
   function applyTheme(themeName) {
     // Map legacy names if any
@@ -28,16 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const brandTag = document.getElementById('header-brand-tag');
     if (brandTag) {
-      const titles = {
-        catppuccin: 'ARCH // SHERBET',
-        tokyonight: 'ARCH // TOKYO',
-        amberbyte: 'ARCH // AMBER',
-        blueberry: 'ARCH // BLUEBERRY',
-        rosepine: 'ARCH // ROSE',
-        gruvbox: 'ARCH // GRUVBOX',
-        nordic: 'ARCH // NORDIC',
-      };
-      brandTag.textContent = titles[active] || 'ARCH // CAELESTIA';
+      brandTag.textContent = '✦ SCREENPAL';
     }
   }
   applyTheme(config.theme || 'catppuccin');
@@ -111,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 5. Telemetry Updates (Native C++ V8 Engine)
   window.api.onTelemetry((stats) => {
-    // Top Waybar Quick Chips
+    // Top Navigation Quick Chips
     const hdrCpu = document.getElementById('hdr-cpu-chip');
     const hdrMem = document.getElementById('hdr-mem-chip');
     if (hdrCpu) hdrCpu.textContent = ` ${stats.cpu.usagePercent}%`;
@@ -133,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (diskVal) diskVal.textContent = `${stats.disk.usedGb}G / ${stats.disk.totalGb}G (${stats.disk.percent}%)`;
     if (diskBar) diskBar.style.width = `${Math.min(100, Math.max(0, stats.disk.percent))}%`;
 
-    // Arch Waybar Status Cluster
+    // Compact Status Pill Cluster
     const wbCpu = document.getElementById('wb-cpu');
     const wbMem = document.getElementById('wb-mem');
     const wbNet = document.getElementById('wb-net');
@@ -173,4 +164,123 @@ document.addEventListener('DOMContentLoaded', async () => {
       widgetMgr.toggleEditMode();
     });
   }
+
+  // 8. Windows Media Session Polling & Dynamic UI Updates
+  function formatMediaTime(seconds) {
+    if (!seconds || isNaN(seconds) || seconds < 0) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+
+  function updateMusicWidget(media) {
+    const titleEl = document.getElementById('music-title');
+    const artistEl = document.getElementById('music-artist');
+    const artImg = document.getElementById('music-album-img');
+    const artFallback = document.getElementById('music-album-fallback');
+    const progressFill = document.getElementById('music-progress-fill');
+    const curTimeEl = document.getElementById('music-current-time');
+    const totalTimeEl = document.getElementById('music-total-time');
+    const playIcon = document.getElementById('music-play-icon');
+    const pauseIcon = document.getElementById('music-pause-icon');
+    const statusBadge = document.getElementById('music-status-badge');
+
+    if (!titleEl) return;
+
+    if (!media || (!media.title && !media.artist)) {
+      titleEl.textContent = 'No Media Playing';
+      titleEl.title = 'No media playing';
+      if (artistEl) {
+        artistEl.textContent = 'Windows Media Session';
+        artistEl.title = 'Windows Media Session';
+      }
+      if (artImg) {
+        artImg.style.display = 'none';
+        artImg.src = '';
+      }
+      if (artFallback) {
+        artFallback.style.display = 'flex';
+      }
+      if (progressFill) progressFill.style.width = '0%';
+      if (curTimeEl) curTimeEl.textContent = '0:00';
+      if (totalTimeEl) totalTimeEl.textContent = '0:00';
+      if (playIcon) playIcon.style.display = 'block';
+      if (pauseIcon) pauseIcon.style.display = 'none';
+      if (statusBadge) {
+        statusBadge.textContent = '● IDLE';
+        statusBadge.className = 'music-live-badge badge-idle';
+      }
+      return;
+    }
+
+    if (titleEl) {
+      titleEl.textContent = media.title || 'Unknown Title';
+      titleEl.title = media.title || '';
+    }
+    if (artistEl) {
+      artistEl.textContent = media.artist || 'Unknown Artist';
+      artistEl.title = media.artist || '';
+    }
+
+    if (artImg && artFallback) {
+      if (media.albumArt) {
+        artImg.src = media.albumArt.startsWith('data:') ? media.albumArt : `data:image/jpeg;base64,${media.albumArt}`;
+        artImg.style.display = 'block';
+        artFallback.style.display = 'none';
+      } else {
+        artImg.style.display = 'none';
+        artFallback.style.display = 'flex';
+      }
+    }
+
+    const duration = Math.max(0, Number(media.duration) || 0);
+    const position = Math.max(0, Number(media.position) || 0);
+    const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
+
+    if (progressFill) {
+      progressFill.style.width = `${percent.toFixed(1)}%`;
+    }
+    if (curTimeEl) curTimeEl.textContent = formatMediaTime(position);
+    if (totalTimeEl) totalTimeEl.textContent = formatMediaTime(duration);
+
+    if (playIcon && pauseIcon) {
+      if (media.isPlaying) {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+      } else {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+      }
+    }
+
+    if (statusBadge) {
+      if (media.isPlaying) {
+        statusBadge.textContent = '● PLAYING';
+        statusBadge.className = 'music-live-badge badge-playing';
+      } else {
+        statusBadge.textContent = '● PAUSED';
+        statusBadge.className = 'music-live-badge badge-paused';
+      }
+    }
+  }
+
+  async function pollMediaSession() {
+    try {
+      const getMedia = (window.electronAPI && window.electronAPI.getMediaSession)
+        ? window.electronAPI.getMediaSession
+        : (window.api && window.api.getMediaSession ? window.api.getMediaSession : null);
+      if (getMedia) {
+        const media = await getMedia();
+        updateMusicWidget(media);
+      }
+    } catch (err) {
+      console.warn('Error polling media session:', err);
+    }
+  }
+
+  window.refreshMediaSession = pollMediaSession;
+
+  // Poll immediately on load, then poll every 2500ms
+  pollMediaSession();
+  setInterval(pollMediaSession, 2500);
 });

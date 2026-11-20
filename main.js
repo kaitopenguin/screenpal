@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { exec } = require('child_process');
 
 let controlCenterWin = null;
 let secondaryHudWin = null;
@@ -477,6 +478,158 @@ ipcMain.handle('stop-wallpaper', () => {
 
 ipcMain.handle('get-wallpaper-status', () => {
   return { isRunning: wallpaperWin !== null && !wallpaperWin.isDestroyed() };
+});
+
+// Windows Media Session Integration (WinRT)
+let mediaSessionCache = null;
+let mediaSessionCacheTime = 0;
+let mediaSessionInFlight = null;
+
+const MEDIA_SESSION_PS = `
+try {
+    Add-Type -AssemblyName System.Runtime.WindowsRuntime
+    $asTaskGeneric = ([System.WindowsRuntimeSystemExtensions].GetMethods() | Where-Object { $_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation\`1' })[0]
+    function Await($WinRtTask, $ResultType) {
+        $asTask = $asTaskGeneric.MakeGenericMethod($ResultType)
+        $netTask = $asTask.Invoke($null, @($WinRtTask))
+        $netTask.Wait(1200) | Out-Null
+        $netTask.Result
+    }
+
+    [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager, Windows.Media.Control, ContentType = WindowsRuntime] | Out-Null
+    [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionMediaProperties, Windows.Media.Control, ContentType = WindowsRuntime] | Out-Null
+    [Windows.Storage.Streams.IRandomAccessStreamWithContentType, Windows.Storage.Streams, ContentType = WindowsRuntime] | Out-Null
+
+    $manager = Await ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager]::RequestAsync()) ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager])
+    $session = $manager.GetCurrentSession()
+    if ($session) {
+        $info = Await ($session.TryGetMediaPropertiesAsync()) ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionMediaProperties])
+        $timeline = $session.GetTimelineProperties()
+        $playback = $session.GetPlaybackInfo()
+        $art = $null
+        try {
+            if ($info.Thumbnail) {
+                $stream = Await ($info.Thumbnail.OpenReadAsync()) ([Windows.Storage.Streams.IRandomAccessStreamWithContentType])
+                $extType = [System.IO.WindowsRuntimeStreamExtensions]
+                $asStreamMethod = ($extType.GetMethods() | Where-Object { $_.Name -eq 'AsStreamForRead' })[0]
+                $netStream = $asStreamMethod.Invoke($null, @($stream))
+                $ms = New-Object System.IO.MemoryStream
+                $netStream.CopyTo($ms)
+                $art = [Convert]::ToBase64String($ms.ToArray())
+                $ms.Dispose()
+                $netStream.Dispose()
+            }
+        } catch {}
+
+        if (-not $info.Title -and -not $info.Artist) {
+            Write-Output "null"
+        } else {
+            [PSCustomObject]@{
+                title = $info.Title
+                artist = $info.Artist
+                isPlaying = ($playback.PlaybackStatus -eq [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionPlaybackStatus]::Playing)
+                position = [double]$timeline.Position.TotalSeconds
+                duration = [double]$timeline.EndTime.TotalSeconds
+                albumArt = $art
+            } | ConvertTo-Json -Compress
+        }
+    } else {
+        Write-Output "null"
+    }
+} catch {
+    Write-Output "null"
+}
+`;
+
+const MEDIA_SESSION_CMD = Buffer.from(MEDIA_SESSION_PS, 'utf16le').toString('base64');
+
+function fetchMediaSession() {
+  const now = Date.now();
+  if (mediaSessionCacheTime && (now - mediaSessionCacheTime < 2000)) {
+    return Promise.resolve(mediaSessionCache);
+  }
+  if (mediaSessionInFlight) {
+    return mediaSessionInFlight;
+  }
+
+  mediaSessionInFlight = new Promise((resolve) => {
+    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${MEDIA_SESSION_CMD}`, { timeout: 3500 }, (err, stdout) => {
+      if (err || !stdout) {
+        resolve(null);
+        return;
+      }
+      try {
+        const text = stdout.trim();
+        if (!text || text === 'null') {
+          resolve(null);
+        } else {
+          const data = JSON.parse(text);
+          if (!data || (!data.title && !data.artist && !data.Title && !data.Artist)) {
+            resolve(null);
+          } else {
+            resolve({
+              title: data.title || data.Title || '',
+              artist: data.artist || data.Artist || '',
+              albumArt: data.albumArt || data.AlbumArt || null,
+              position: typeof data.position === 'number' ? data.position : (data.Position || 0),
+              duration: typeof data.duration === 'number' ? data.duration : (data.Duration || 0),
+              isPlaying: data.isPlaying !== undefined ? Boolean(data.isPlaying) : Boolean(data.IsPlaying),
+            });
+          }
+        }
+      } catch (_) {
+        resolve(null);
+      }
+    });
+  }).then((res) => {
+    mediaSessionCache = res;
+    mediaSessionCacheTime = Date.now();
+    mediaSessionInFlight = null;
+    return res;
+  }).catch(() => {
+    mediaSessionInFlight = null;
+    return null;
+  });
+
+  return mediaSessionInFlight;
+}
+
+function sendMediaControl(action) {
+  const method = action === 'next' ? 'TrySkipNextAsync' : (action === 'previous' ? 'TrySkipPreviousAsync' : 'TryTogglePlayPauseAsync');
+  const ps = `
+try {
+    Add-Type -AssemblyName System.Runtime.WindowsRuntime
+    $asTaskGeneric = ([System.WindowsRuntimeSystemExtensions].GetMethods() | Where-Object { $_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation\`1' })[0]
+    function Await($WinRtTask, $ResultType) {
+        $asTask = $asTaskGeneric.MakeGenericMethod($ResultType)
+        $netTask = $asTask.Invoke($null, @($WinRtTask))
+        $netTask.Wait(1200) | Out-Null
+        $netTask.Result
+    }
+    [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager, Windows.Media.Control, ContentType = WindowsRuntime] | Out-Null
+    $manager = Await ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager]::RequestAsync()) ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager])
+    $session = $manager.GetCurrentSession()
+    if ($session) {
+        $res = Await ($session.${method}()) ([bool])
+        Write-Output $res
+    }
+} catch {}
+`;
+  const b64 = Buffer.from(ps, 'utf16le').toString('base64');
+  return new Promise((resolve) => {
+    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${b64}`, { timeout: 2500 }, (err, stdout) => {
+      mediaSessionCacheTime = 0; // invalidate cache
+      resolve(!err && stdout && stdout.trim() === 'True');
+    });
+  });
+}
+
+ipcMain.handle('get-media-session', async () => {
+  return await fetchMediaSession();
+});
+
+ipcMain.handle('control-media-session', async (event, action) => {
+  return await sendMediaControl(action);
 });
 
 // App Lifecycle

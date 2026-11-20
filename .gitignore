@@ -2,8 +2,11 @@
 node_modules/
 dist/
 
-# Rust build artifacts
+# Rust / Cargo
 target/
+Cargo.lock
+Cargo.toml
+.cargo/
 *.exe
 **/*.rs.bk
 

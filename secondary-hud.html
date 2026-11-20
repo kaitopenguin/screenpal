@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caelestia Shell - Secondary Display HUD</title>
+  <title>ScreenPal - Secondary Display</title>
   <link rel="stylesheet" href="src/css/impeccable-ios.css">
   <style>
     html, body {
@@ -19,32 +19,32 @@
 </head>
 <body class="theme-catppuccin">
 
-  <!-- Caelestia Floating Island HUD Container -->
+  <!-- ScreenPal Floating Island HUD Container -->
   <div class="caelestia-hud-frame">
     
-    <!-- Floating Waybar Pill Island -->
-    <header class="caelestia-waybar-island">
+    <!-- Floating macOS-style Menu Bar Island -->
+    <header class="caelestia-waybar-island macos-menubar">
       
-      <!-- Left: Arch Logo & Workspaces & Stat Chips -->
+      <!-- Left: Status Indicator & System Chips -->
       <div class="waybar-cluster">
-        <div class="arch-brand-pill">
-          <div class="arch-dot-pulse"></div>
-          <span id="header-brand-tag">ARCH // CAELESTIA</span>
+        <div class="arch-brand-pill macos-brand-pill">
+          <div class="arch-dot-pulse macos-dot-active"></div>
+          <span id="header-brand-tag">✦ SCREENPAL</span>
         </div>
 
-        <div class="workspaces-pill">
+        <div class="workspaces-pill macos-spaces-pill">
           <span class="ws-dot active"></span>
           <span class="ws-dot"></span>
           <span class="ws-dot"></span>
         </div>
 
-        <span class="waybar-chip-btn" id="hdr-cpu-chip" title="CPU Load"> 14%</span>
-        <span class="waybar-chip-btn" id="hdr-mem-chip" title="RAM Usage">󰍛 8.4G</span>
+        <span class="waybar-chip-btn macos-chip-btn" id="hdr-cpu-chip" title="CPU Load"> 14%</span>
+        <span class="waybar-chip-btn macos-chip-btn" id="hdr-mem-chip" title="RAM Usage">󰍛 8.4G</span>
       </div>
 
-      <!-- Right: Omarchy Themes, Dock Controls & Customize -->
+      <!-- Right: Themes, Dock Controls & Customize -->
       <div class="waybar-cluster">
-        <select id="hud-theme-select" class="theme-dropdown-select" title="Switch Omarchy Theme">
+        <select id="hud-theme-select" class="theme-dropdown-select macos-select" title="Switch Theme">
           <option value="catppuccin">Catppuccin Sherbet</option>
           <option value="tokyonight">Tokyo Night</option>
           <option value="amberbyte">Amberbyte</option>
@@ -54,15 +54,15 @@
           <option value="nordic">Nordic Frost</option>
         </select>
 
-        <button id="btn-dock-left" class="waybar-chip-btn" title="Dock Left (Treo bên trái)">◧</button>
-        <button id="btn-dock-right" class="waybar-chip-btn" title="Dock Right (Treo bên phải)">◨</button>
-        <button id="btn-dock-full" class="waybar-chip-btn" title="Full Width (Toàn màn hình)">⛶</button>
-        <button id="btn-edit-widgets" class="waybar-chip-btn" title="Customize Widgets">✨</button>
+        <button id="btn-dock-left" class="waybar-chip-btn macos-chip-btn" title="Dock Left">◧</button>
+        <button id="btn-dock-right" class="waybar-chip-btn macos-chip-btn" title="Dock Right">◨</button>
+        <button id="btn-dock-full" class="waybar-chip-btn macos-chip-btn" title="Full Width">⛶</button>
+        <button id="btn-edit-widgets" class="waybar-chip-btn macos-chip-btn" title="Customize Widgets">✨</button>
       </div>
 
     </header>
 
-    <!-- Caelestia Modular Widget Stack -->
+    <!-- ScreenPal Modular Widget Stack -->
     <main id="bento-widget-container" class="caelestia-widget-list"></main>
 
   </div>

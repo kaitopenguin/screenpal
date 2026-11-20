@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Caelestia Shell - Multiscreen Control Center</title>
+  <title>ScreenPal - Multiscreen Control Center</title>
   <link rel="stylesheet" href="src/css/impeccable-ios.css">
   <style>
     /* Monitor Canvas Map */
@@ -118,9 +118,9 @@
     <!-- Top Header -->
     <header class="cc-header">
       <div class="cc-brand-title">
-        <span style="color: var(--accent-cyan); font-size: 22px;">󰣇</span>
-        <span>Multiscreen Tool</span>
-        <span class="arch-brand-pill" style="font-size: 10px;">CAELESTIA SHELL v2.1</span>
+        <span style="color: var(--accent-cyan); font-size: 22px;">✦</span>
+        <span>ScreenPal</span>
+        <span class="arch-brand-pill" style="font-size: 10px;">CONTROL CENTER v2.1</span>
       </div>
       <div style="display: flex; gap: 10px;">
         <button id="btn-relaunch-hud" class="cc-btn cc-btn-primary">
@@ -136,19 +136,19 @@
     <nav class="cc-nav-tabs">
       <button class="cc-tab-btn active" data-tab="tab-docking">
         <span>🖥️</span>
-        <span>Displays & Docking (Màn hình & Treo cạnh)</span>
+        <span>Displays & Docking</span>
       </button>
       <button class="cc-tab-btn" data-tab="tab-themes">
         <span>🎨</span>
-        <span>7 Omarchy Themes (Chủ đề Arch Linux)</span>
+        <span>Themes</span>
       </button>
       <button class="cc-tab-btn" data-tab="tab-widgets">
         <span>🧩</span>
-        <span>Caelestia Widgets (Widget & Bể cá)</span>
+        <span>Widgets & Companion</span>
       </button>
       <button class="cc-tab-btn" data-tab="tab-wallpaper">
         <span>🎬</span>
-        <span>Dedicated Live Wallpaper (Hình nền riêng)</span>
+        <span>Live Wallpaper</span>
       </button>
     </nav>
 
@@ -186,30 +186,30 @@
           </div>
 
           <div class="cc-card">
-            <div class="cc-card-title">Side Docking (Treo một bên màn hình)</div>
+            <div class="cc-card-title">Side Docking</div>
             <div class="cc-card-desc">Attach HUD elegantly to the edge of your vertical display</div>
 
             <div class="cc-dock-grid">
               <div class="cc-dock-card active" data-dock="left">
                 <div style="font-size: 20px; margin-bottom: 4px;">◧</div>
-                <div style="font-size: 12px; font-weight: 700; color: #fff;">Treo Bên Trái</div>
+                <div style="font-size: 12px; font-weight: 700; color: #fff;">Dock Left</div>
                 <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Dock Left Side</div>
               </div>
               <div class="cc-dock-card" data-dock="right">
                 <div style="font-size: 20px; margin-bottom: 4px;">◨</div>
-                <div style="font-size: 12px; font-weight: 700; color: #fff;">Treo Bên Phải</div>
+                <div style="font-size: 12px; font-weight: 700; color: #fff;">Dock Right</div>
                 <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Dock Right Side</div>
               </div>
               <div class="cc-dock-card" data-dock="full">
                 <div style="font-size: 20px; margin-bottom: 4px;">⛶</div>
-                <div style="font-size: 12px; font-weight: 700; color: #fff;">Toàn Màn Hình</div>
+                <div style="font-size: 12px; font-weight: 700; color: #fff;">Full Width</div>
                 <div style="font-size: 10px; color: var(--text-dim); font-family: var(--font-mono);">Full Width</div>
               </div>
             </div>
 
             <div style="margin-bottom: 14px;">
               <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <label class="cc-label">Sidebar Width (Độ rộng dock)</label>
+                <label class="cc-label">Sidebar Width</label>
                 <span id="dock-width-val" style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);">360 px</span>
               </div>
               <input type="range" id="slider-dock-width" min="280" max="500" value="360" step="10" style="width: 100%;">
@@ -267,16 +267,16 @@
     </div>
 
     <!-- ==================================================================
-         TAB 2: 7 OMARCHY THEMES
+         TAB 2: THEMES
          ================================================================== -->
     <div id="tab-themes" class="cc-panel">
       <div class="cc-card">
         <div class="cc-card-title">
-          <span>7 Omarchy & Arch Linux Themes</span>
+          <span>Themes</span>
           <span class="arch-brand-pill" id="current-theme-badge">Catppuccin Sherbet Active</span>
         </div>
         <div class="cc-card-desc">
-          Inspired by Omarchy's viral Linux desktop ricing themes: soft pastels, neon cyberpunk, and retro amber
+          Curated visual themes: soft pastels, neon cyberpunk, and retro amber
         </div>
 
         <div class="omarchy-theme-grid">
@@ -407,7 +407,7 @@
     </div>
 
     <!-- ==================================================================
-         TAB 3: CAELESTIA WIDGETS & COMPANION
+         TAB 3: WIDGETS & COMPANION
          ================================================================== -->
     <div id="tab-widgets" class="cc-panel">
       <div class="cc-grid-2col">

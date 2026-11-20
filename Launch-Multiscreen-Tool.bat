@@ -1,5 +1,5 @@
 @echo off
-title Multiscreen Tool v2.1 (Arch Linux Ricing)
+title ScreenPal v2.1 (Secondary Display Companion)
 cd /d "%~dp0"
 
 if exist "dist\multiscreen-tool-win32-x64\multiscreen-tool.exe" (

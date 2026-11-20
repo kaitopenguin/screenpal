@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('api', {
+const api = {
   getMonitors: () => ipcRenderer.invoke('get-monitors'),
   getConfig: () => ipcRenderer.invoke('get-config'),
   saveConfig: (cfg) => ipcRenderer.invoke('save-config', cfg),
@@ -13,10 +13,15 @@ contextBridge.exposeInMainWorld('api', {
   startWallpaper: (options) => ipcRenderer.invoke('start-wallpaper', options),
   stopWallpaper: () => ipcRenderer.invoke('stop-wallpaper'),
   getWallpaperStatus: () => ipcRenderer.invoke('get-wallpaper-status'),
+  getMediaSession: () => ipcRenderer.invoke('get-media-session'),
+  controlMediaSession: (action) => ipcRenderer.invoke('control-media-session', action),
   onTelemetry: (callback) => {
     ipcRenderer.on('telemetry-update', (event, data) => callback(data));
   },
   onConfigUpdated: (callback) => {
     ipcRenderer.on('config-updated', (event, data) => callback(data));
   },
-});
+};
+
+contextBridge.exposeInMainWorld('api', api);
+contextBridge.exposeInMainWorld('electronAPI', api);
