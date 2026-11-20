@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ScreenPal - Secondary Display</title>
+  <title>ScreenPal</title>
   <link rel="stylesheet" href="src/css/impeccable-ios.css">
   <style>
     html, body {
@@ -18,52 +18,34 @@
   </style>
 </head>
 <body class="theme-catppuccin">
-
-  <!-- ScreenPal Floating Island HUD Container -->
-  <div class="caelestia-hud-frame">
+  <div class="hud-root">
     
-    <!-- Floating macOS-style Menu Bar Island -->
-    <header class="caelestia-waybar-island macos-menubar">
-      
-      <!-- Left: Status Indicator & System Chips -->
-      <div class="waybar-cluster">
-        <div class="arch-brand-pill macos-brand-pill">
-          <div class="arch-dot-pulse macos-dot-active"></div>
-          <span id="header-brand-tag">✦ SCREENPAL</span>
-        </div>
-
-        <div class="workspaces-pill macos-spaces-pill">
-          <span class="ws-dot active"></span>
-          <span class="ws-dot"></span>
-          <span class="ws-dot"></span>
-        </div>
-
-        <span class="waybar-chip-btn macos-chip-btn" id="hdr-cpu-chip" title="CPU Load"> 14%</span>
-        <span class="waybar-chip-btn macos-chip-btn" id="hdr-mem-chip" title="RAM Usage">󰍛 8.4G</span>
+    <!-- Top bar: 44px height, clean -->
+    <header class="hud-topbar">
+      <div class="hud-topbar-left">
+        <span class="hud-status-dot"></span>
+        <span class="hud-brand" id="header-brand-tag">ScreenPal</span>
       </div>
-
-      <!-- Right: Themes, Dock Controls & Customize -->
-      <div class="waybar-cluster">
-        <select id="hud-theme-select" class="theme-dropdown-select macos-select" title="Switch Theme">
-          <option value="catppuccin">Catppuccin Sherbet</option>
+      <div class="hud-topbar-right">
+        <select id="hud-theme-select" class="hud-select" title="Theme">
+          <option value="catppuccin">Catppuccin</option>
           <option value="tokyonight">Tokyo Night</option>
-          <option value="amberbyte">Amberbyte</option>
+          <option value="amberbyte">Amber</option>
           <option value="blueberry">Blueberry</option>
           <option value="rosepine">Rose Pine</option>
-          <option value="gruvbox">Gruvbox Material</option>
-          <option value="nordic">Nordic Frost</option>
+          <option value="gruvbox">Gruvbox</option>
+          <option value="nordic">Nordic</option>
         </select>
-
-        <button id="btn-dock-left" class="waybar-chip-btn macos-chip-btn" title="Dock Left">◧</button>
-        <button id="btn-dock-right" class="waybar-chip-btn macos-chip-btn" title="Dock Right">◨</button>
-        <button id="btn-dock-full" class="waybar-chip-btn macos-chip-btn" title="Full Width">⛶</button>
-        <button id="btn-edit-widgets" class="waybar-chip-btn macos-chip-btn" title="Customize Widgets">✨</button>
+        <button id="btn-dock-left" class="hud-icon-btn" title="Dock Left">◧</button>
+        <button id="btn-dock-right" class="hud-icon-btn" title="Dock Right">◨</button>
+        <button id="btn-edit-widgets" class="hud-icon-btn" title="Widgets">⊞</button>
       </div>
-
     </header>
 
-    <!-- ScreenPal Modular Widget Stack -->
-    <main id="bento-widget-container" class="caelestia-widget-list"></main>
+    <!-- Widget area: scrollable, flex column -->
+    <main class="hud-widgets" id="widget-container">
+      <!-- Widgets injected here by widget-manager.js -->
+    </main>
 
   </div>
 

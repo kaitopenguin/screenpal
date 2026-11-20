@@ -99,7 +99,7 @@ const WIDGET_CATALOG = [
 
 class WidgetManager {
   constructor(options = {}) {
-    this.container = options.container || document.getElementById('bento-widget-container');
+    this.container = options.container || document.getElementById('widget-container') || document.getElementById('bento-widget-container');
     this.activeWidgets = options.activeWidgets || [
       'arch-waybar-status',
       'fish-tank',

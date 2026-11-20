@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnDockFull) btnDockFull.addEventListener('click', () => window.api.setDockMode('full'));
 
   // 3. Initialize Modular Widget Manager
-  const widgetContainer = document.getElementById('bento-widget-container');
+  const widgetContainer = document.getElementById('widget-container') || document.getElementById('bento-widget-container');
   const widgetMgr = new WidgetManager({
     container: widgetContainer,
     activeWidgets: config.activeWidgets || [

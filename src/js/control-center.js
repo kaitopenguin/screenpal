@@ -16,17 +16,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 2. Navigation Tab Switching
-  const tabBtns = document.querySelectorAll('.cc-tab-btn');
+  const tabBtns = document.querySelectorAll('.cc-tab, .cc-tab-btn');
   const tabPanels = document.querySelectorAll('.cc-panel');
 
   tabBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-tab');
+      let targetId = btn.getAttribute('data-tab');
+      if (targetId && !targetId.startsWith('tab-')) {
+        targetId = 'tab-' + targetId;
+      }
       tabBtns.forEach(b => b.classList.remove('active'));
       tabPanels.forEach(p => p.classList.remove('active'));
 
       btn.classList.add('active');
-      const targetPanel = document.getElementById(targetId);
+      const targetPanel = document.getElementById(targetId) || (targetId === 'tab-displays' ? document.getElementById('tab-docking') : null);
       if (targetPanel) targetPanel.classList.add('active');
     });
   });
@@ -163,7 +166,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 5. 7 Omarchy Themes
-  const themeCards = document.querySelectorAll('.omarchy-theme-card');
+  const themeCards = document.querySelectorAll('.cc-theme-card, .omarchy-theme-card');
   const currentThemeBadge = document.getElementById('current-theme-badge');
 
   const validThemes = ['catppuccin', 'tokyonight', 'amberbyte', 'blueberry', 'rosepine', 'gruvbox', 'nordic'];
@@ -405,18 +408,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // 11. Launch & Close Buttons
-  document.getElementById('btn-relaunch-hud').addEventListener('click', async () => {
-    await saveCurrentConfig();
-    await window.api.launchSecondary({
-      monitorIndex: parseInt(selectMon.value, 10),
-      dockMode: config.dockMode || 'left',
-      alwaysOnTop: onTopCheck.checked,
+  const btnRelaunch = document.getElementById('btn-relaunch-hud');
+  if (btnRelaunch) {
+    btnRelaunch.addEventListener('click', async () => {
+      await saveCurrentConfig();
+      await window.api.launchSecondary({
+        monitorIndex: parseInt(selectMon.value, 10),
+        dockMode: config.dockMode || 'left',
+        alwaysOnTop: onTopCheck.checked,
+      });
     });
-  });
+  }
 
-  document.getElementById('btn-close-hud').addEventListener('click', async () => {
-    await window.api.closeSecondary();
-  });
+  const btnClose = document.getElementById('btn-close-hud');
+  if (btnClose) {
+    btnClose.addEventListener('click', async () => {
+      await window.api.closeSecondary();
+    });
+  }
 
   const btnToggleFull = document.getElementById('btn-toggle-hud-full');
   if (btnToggleFull) {
