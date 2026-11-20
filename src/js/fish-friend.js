@@ -204,6 +204,9 @@ class AquaticCreature {
   }
 
   triggerEmote(text) {
+    if (this.emotes.length >= 3) {
+      this.emotes.shift();
+    }
     this.emotes.push({
       text,
       x: 0,
@@ -424,6 +427,9 @@ class AquaticCreature {
     this.finPhase += cfg.flutterFreq * 2.2;
 
     // 8. Update Creature Emotes
+    while (this.emotes.length > 3) {
+      this.emotes.shift();
+    }
     for (let i = this.emotes.length - 1; i >= 0; i--) {
       const em = this.emotes[i];
       em.y += em.vy;
@@ -1186,16 +1192,37 @@ class FishFriendTank {
     this.mouse = { x: 0, y: 0, active: false };
     this.destroyed = false;
     this.animId = null;
+    this._lastFrame = 0;
+    this._frameCounter = 0;
 
-    // Caustics shimmer clock
+    // Caustics shimmer clock & offscreen buffer
     this.causticTime = 0;
+    this._causticCanvas = null;
+    this._causticCtx = null;
+    this._causticDirty = true;
 
     // Initialize systems
     this.initCanvas();
     this.initCreatures();
     this.initPlants();
     this.bindEvents();
+    this.bindVisibility();
     this.loop();
+  }
+
+  // --------------------------------------------------------------------------
+  // Page Visibility API
+  // --------------------------------------------------------------------------
+  bindVisibility() {
+    this.visibilityHandler = () => {
+      if (typeof document !== 'undefined' && !document.hidden && this.animId === null) {
+        this._lastFrame = 0;
+        this.loop();
+      }
+    };
+    if (typeof document !== 'undefined' && document.addEventListener) {
+      document.addEventListener('visibilitychange', this.visibilityHandler);
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -1225,6 +1252,7 @@ class FishFriendTank {
       this.canvas.style.height = `${this.height}px`;
     }
 
+    this._causticDirty = true;
     this.ctx.resetTransform?.();
     this.ctx.scale(this.dpr, this.dpr);
   }
@@ -1237,6 +1265,9 @@ class FishFriendTank {
     }
     if (this.resizeHandler && typeof window !== 'undefined' && window.removeEventListener) {
       window.removeEventListener('resize', this.resizeHandler);
+    }
+    if (this.visibilityHandler && typeof document !== 'undefined' && document.removeEventListener) {
+      document.removeEventListener('visibilitychange', this.visibilityHandler);
     }
   }
 
@@ -1269,14 +1300,17 @@ class FishFriendTank {
   }
 
   dropFood(x, y) {
-    const flakeCount = Math.floor(MathUtils.rand(3, 6));
+    const flakeCount = Math.floor(MathUtils.rand(2, 4));
     for (let i = 0; i < flakeCount; i++) {
+      if (this.foods.length >= 5) {
+        this.foods.shift();
+      }
       this.foods.push(new FoodParticle(x, y));
     }
 
     // Surface splash ripples & bubbles
     this.ripples.push(new SurfaceRipple(x, Math.min(y, 25)));
-    for (let b = 0; b < 3; b++) {
+    for (let b = 0; b < 2; b++) {
       this.addBubble(x + MathUtils.rand(-10, 10), Math.min(y, 30), MathUtils.rand(2, 4), 0.5);
     }
 
@@ -1289,6 +1323,9 @@ class FishFriendTank {
   }
 
   addBubble(x, y, r, speed) {
+    if (this.bubbles.length >= 12) {
+      this.bubbles.shift();
+    }
     this.bubbles.push(new WaterBubble(x, y, r, speed));
   }
 
@@ -1370,15 +1407,23 @@ class FishFriendTank {
   // --------------------------------------------------------------------------
   // Update Loop
   // --------------------------------------------------------------------------
-  update() {
-    this.causticTime += 0.025;
+  update(elapsed = 33) {
+    this._frameCounter = (this._frameCounter || 0) + 1;
+
+    // Throttle caustic shimmer progression to every 3rd frame
+    if (this._frameCounter % 3 === 0) {
+      this.causticTime += 0.075;
+    }
 
     // 1. Update Fish Creatures
     for (const fish of this.creatures) {
       fish.update(this, this.foods, this.creatures);
     }
 
-    // 2. Update Food Flakes
+    // 2. Update Food Flakes (capped at max 5 items)
+    while (this.foods.length > 5) {
+      this.foods.shift();
+    }
     for (let i = this.foods.length - 1; i >= 0; i--) {
       const food = this.foods[i];
       food.update(this.height);
@@ -1387,14 +1432,18 @@ class FishFriendTank {
       }
     }
 
-    // 3. Ambient Bubbles rising from bottom substrate
-    if (Math.random() < 0.07) {
+    // 3. Ambient Bubbles rising from bottom substrate (capped at max 12 items)
+    if (this.bubbles.length < 12 && Math.random() < 0.05) {
       this.addBubble(
         MathUtils.rand(20, this.width - 20),
         this.height - 18,
         MathUtils.rand(1.5, 3.8),
         MathUtils.rand(0.7, 1.4)
       );
+    }
+
+    while (this.bubbles.length > 12) {
+      this.bubbles.shift();
     }
 
     for (let i = this.bubbles.length - 1; i >= 0; i--) {
@@ -1465,33 +1514,83 @@ class FishFriendTank {
 
   drawCausticLightShimmer() {
     const ctx = this.ctx;
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
 
-    // Animated caustic rays radiating from water surface
-    const rayCount = 7;
-    for (let i = 0; i < rayCount; i++) {
-      const t = this.causticTime + i * 1.35;
-      const startX = (i / rayCount) * this.width + Math.sin(t * 0.8) * 20;
-      const endX = startX + Math.sin(t * 1.2) * 55;
-      const rayWidth = 24 + Math.sin(t * 1.5) * 14;
-
-      const rayGrad = ctx.createLinearGradient(startX, 0, endX, this.height * 0.85);
-      rayGrad.addColorStop(0, 'rgba(0, 242, 254, 0.16)');
-      rayGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.08)');
-      rayGrad.addColorStop(1, 'rgba(0, 242, 254, 0)');
-
-      ctx.beginPath();
-      ctx.moveTo(startX - rayWidth * 0.5, 0);
-      ctx.lineTo(startX + rayWidth * 0.5, 0);
-      ctx.lineTo(endX + rayWidth * 1.2, this.height * 0.85);
-      ctx.lineTo(endX - rayWidth * 1.2, this.height * 0.85);
-      ctx.closePath();
-      ctx.fillStyle = rayGrad;
-      ctx.fill();
+    // Throttle caustic large-area redraws: update buffer only every 3rd frame
+    if (!this._causticCanvas && typeof document !== 'undefined' && document.createElement) {
+      this._causticCanvas = document.createElement('canvas');
+      this._causticCtx = this._causticCanvas.getContext('2d');
     }
 
-    ctx.restore();
+    if (this._causticCanvas) {
+      const cw = Math.floor(this.width);
+      const ch = Math.floor(this.height * 0.85);
+
+      if (this._causticCanvas.width !== cw || this._causticCanvas.height !== ch) {
+        this._causticCanvas.width = cw;
+        this._causticCanvas.height = ch;
+        this._causticDirty = true;
+      }
+
+      if (this._causticDirty || this._frameCounter % 3 === 0) {
+        this._causticDirty = false;
+        const cctx = this._causticCtx;
+        cctx.clearRect(0, 0, cw, ch);
+
+        // Animated caustic rays radiating from water surface (optimized to 5 rays)
+        const rayCount = 5;
+        for (let i = 0; i < rayCount; i++) {
+          const t = this.causticTime + i * 1.35;
+          const startX = (i / rayCount) * cw + Math.sin(t * 0.8) * 20;
+          const endX = startX + Math.sin(t * 1.2) * 55;
+          const rayWidth = 24 + Math.sin(t * 1.5) * 14;
+
+          const rayGrad = cctx.createLinearGradient(startX, 0, endX, ch);
+          rayGrad.addColorStop(0, 'rgba(0, 242, 254, 0.16)');
+          rayGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.08)');
+          rayGrad.addColorStop(1, 'rgba(0, 242, 254, 0)');
+
+          cctx.beginPath();
+          cctx.moveTo(startX - rayWidth * 0.5, 0);
+          cctx.lineTo(startX + rayWidth * 0.5, 0);
+          cctx.lineTo(endX + rayWidth * 1.2, ch);
+          cctx.lineTo(endX - rayWidth * 1.2, ch);
+          cctx.closePath();
+          cctx.fillStyle = rayGrad;
+          cctx.fill();
+        }
+      }
+
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      ctx.drawImage(this._causticCanvas, 0, 0);
+      ctx.restore();
+    } else {
+      // Fallback for non-DOM canvas environments
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      const rayCount = 5;
+      for (let i = 0; i < rayCount; i++) {
+        const t = this.causticTime + i * 1.35;
+        const startX = (i / rayCount) * this.width + Math.sin(t * 0.8) * 20;
+        const endX = startX + Math.sin(t * 1.2) * 55;
+        const rayWidth = 24 + Math.sin(t * 1.5) * 14;
+
+        const rayGrad = ctx.createLinearGradient(startX, 0, endX, this.height * 0.85);
+        rayGrad.addColorStop(0, 'rgba(0, 242, 254, 0.16)');
+        rayGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.08)');
+        rayGrad.addColorStop(1, 'rgba(0, 242, 254, 0)');
+
+        ctx.beginPath();
+        ctx.moveTo(startX - rayWidth * 0.5, 0);
+        ctx.lineTo(startX + rayWidth * 0.5, 0);
+        ctx.lineTo(endX + rayWidth * 1.2, this.height * 0.85);
+        ctx.lineTo(endX - rayWidth * 1.2, this.height * 0.85);
+        ctx.closePath();
+        ctx.fillStyle = rayGrad;
+        ctx.fill();
+      }
+      ctx.restore();
+    }
   }
 
   drawPlants() {
@@ -1603,11 +1702,18 @@ class FishFriendTank {
     }
   }
 
-  loop() {
+  loop(timestamp = 0) {
     if (this.destroyed) return;
-    this.update();
+    if (typeof document !== 'undefined' && document.hidden) {
+      this.animId = null;
+      return; // Don't render when tab/window hidden
+    }
+    this.animId = requestAnimationFrame((ts) => this.loop(ts));
+    const elapsed = timestamp - this._lastFrame;
+    if (elapsed < 33) return; // 30fps cap
+    this._lastFrame = timestamp;
+    this.update(elapsed);
     this.draw();
-    this.animId = requestAnimationFrame(() => this.loop());
   }
 }
 

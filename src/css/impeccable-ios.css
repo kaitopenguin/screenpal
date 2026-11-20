@@ -1,46 +1,58 @@
 /* ==========================================================================
-   SCREENPAL DESIGN SYSTEM (MACOS SONOMA & IOS 18 SPEC)
-   Ultra-clean, minimalist, glassmorphic floating panels, buttery smooth 60fps
+   SCREENPAL DESIGN SYSTEM — NATIVE DESKTOP EDITION
+   Inspired by Raycast, Linear, and macOS Sonoma Native Applications
+   Built for 24/7 ultra-low GPU secondary monitor operation.
+   PERFORMANCE: 0% backdrop-filter, 0 filter animations, minimal GPU paint.
    ========================================================================== */
 
-/* 1. Base Variables & Common Reset */
+/* ==========================================================================
+   1. BASE DESIGN TOKENS & SYSTEM VARIABLES
+   ========================================================================== */
 :root {
-  --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI Variable Display", "Segoe UI", sans-serif;
+  /* System Typography Hierarchy */
+  --font-ui: -apple-system, "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", "Cascadia Code", monospace;
 
-  /* Global Animations */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --trans-fast: 0.18s var(--ease-out-expo);
-  --trans-smooth: 0.28s var(--ease-out-expo);
+  /* Standard Easing & Transitions (max 200ms ease-out) */
+  --trans-instant: 0.10s ease-out;
+  --trans-fast: 0.15s ease-out;
+  --trans-smooth: 0.20s ease-out;
 
-  /* Radius System */
+  /* Geometry & Radius */
   --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-card: 16px;
   --radius-pill: 9999px;
 
-  /* Glass & Depth */
-  --glass-blur: 28px;
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-hover: rgba(255, 255, 255, 0.18);
-  --shadow-elevation: 0 12px 36px -4px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.25);
-  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.35);
+  /* Header Specification */
+  --header-height: 44px;
 
-  /* Default Theme: Catppuccin Sherbet */
+  /* Static Layer Shadows (no dynamic blur computation on hover) */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-dialog: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  /* Fallback Base Theme (Default: Catppuccin) */
   --bg-desktop: #11111b;
-  --bg-panel: rgba(24, 24, 37, 0.88);
-  --bg-card: rgba(30, 30, 46, 0.75);
-  --bg-card-hover: rgba(49, 50, 68, 0.85);
-  --bg-chip: rgba(49, 50, 68, 0.65);
-  --border-card: rgba(205, 214, 244, 0.1);
-  --border-card-hover: rgba(137, 220, 235, 0.4);
+  --bg-panel: #1e1e2e;
+  --bg-card: #24243e;
+  --bg-card-hover: #292945;
+  --bg-header: #181825;
+  --bg-chip: #2f2f4a;
+  --bg-chip-hover: #373756;
+  --bg-input: #1a1a28;
+
+  --border-subtle: rgba(205, 214, 244, 0.08);
+  --border-card: rgba(205, 214, 244, 0.08);
+  --border-hover: #cba6f7;
+  --border-active: #cba6f7;
 
   --text-main: #cdd6f4;
   --text-sub: #a6adc8;
   --text-dim: #6c7086;
 
+  --accent-primary: #cba6f7;
   --accent-cyan: #89dceb;
   --accent-blue: #89b4fa;
   --accent-mauve: #cba6f7;
@@ -48,162 +60,221 @@
   --accent-peach: #fab387;
   --accent-red: #f38ba8;
   --accent-yellow: #f9e2af;
-  --glow-accent: rgba(137, 220, 235, 0.25);
 }
 
 /* ==========================================================================
-   2. 7 CURATED COLOR PALETTES & THEMES
+   2. 7 CURATED THEME PALETTES (SOLID OPAQUE COLORS, NO BLUR)
    ========================================================================== */
 
 /* Theme 1: Catppuccin Sherbet (Default) */
-body.theme-catppuccin, body.theme-arch {
+body.theme-catppuccin,
+body.theme-arch {
   --bg-desktop: #11111b;
-  --bg-panel: rgba(24, 24, 37, 0.9);
-  --bg-card: rgba(30, 30, 46, 0.82);
-  --bg-card-hover: rgba(49, 50, 68, 0.9);
-  --bg-chip: rgba(49, 50, 68, 0.7);
-  --border-card: rgba(205, 214, 244, 0.12);
-  --border-card-hover: #89dceb;
+  --bg-panel: #1e1e2e;
+  --bg-card: #24243e;
+  --bg-card-hover: #2a2a46;
+  --bg-header: #181825;
+  --bg-chip: #2e2e48;
+  --bg-chip-hover: #383857;
+  --bg-input: #171724;
+
+  --border-subtle: rgba(205, 214, 244, 0.08);
+  --border-card: rgba(205, 214, 244, 0.08);
+  --border-hover: #cba6f7;
+
   --text-main: #cdd6f4;
   --text-sub: #a6adc8;
   --text-dim: #7f849c;
+
+  --accent-primary: #cba6f7;
   --accent-cyan: #89dceb;
   --accent-blue: #89b4fa;
   --accent-mauve: #cba6f7;
   --accent-green: #a6e3a1;
   --accent-peach: #fab387;
   --accent-red: #f38ba8;
-  --glow-accent: rgba(137, 220, 235, 0.3);
+  --accent-yellow: #f9e2af;
 }
 
 /* Theme 2: Tokyo Night */
 body.theme-tokyonight {
   --bg-desktop: #16161e;
-  --bg-panel: rgba(26, 27, 38, 0.92);
-  --bg-card: rgba(36, 40, 59, 0.85);
-  --bg-card-hover: rgba(47, 52, 77, 0.92);
-  --bg-chip: rgba(41, 46, 66, 0.8);
-  --border-card: rgba(125, 207, 255, 0.14);
-  --border-card-hover: #7aa2f7;
+  --bg-panel: #1a1b26;
+  --bg-card: #24283b;
+  --bg-card-hover: #2b3046;
+  --bg-header: #16161e;
+  --bg-chip: #2f354f;
+  --bg-chip-hover: #39405f;
+  --bg-input: #13141b;
+
+  --border-subtle: rgba(122, 162, 247, 0.12);
+  --border-card: rgba(122, 162, 247, 0.12);
+  --border-hover: #7aa2f7;
+
   --text-main: #c0caf5;
   --text-sub: #a9b1d6;
   --text-dim: #565f89;
+
+  --accent-primary: #7aa2f7;
   --accent-cyan: #7dcfff;
   --accent-blue: #7aa2f7;
   --accent-mauve: #bb9af7;
   --accent-green: #9ece6a;
   --accent-peach: #ff9e64;
   --accent-red: #f7768e;
-  --glow-accent: rgba(122, 162, 247, 0.3);
+  --accent-yellow: #e0af68;
 }
 
-/* Theme 3: Amberbyte (Cyberpunk Amber) */
-body.theme-amberbyte, body.theme-retro {
+/* Theme 3: Amberbyte (Cyberpunk Terminal) */
+body.theme-amberbyte,
+body.theme-retro {
   --bg-desktop: #0c0a07;
-  --bg-panel: rgba(18, 15, 11, 0.94);
-  --bg-card: rgba(28, 23, 17, 0.88);
-  --bg-card-hover: rgba(38, 31, 23, 0.94);
-  --bg-chip: rgba(45, 36, 26, 0.8);
-  --border-card: rgba(255, 176, 0, 0.22);
-  --border-card-hover: #ffb000;
+  --bg-panel: #1a160f;
+  --bg-card: #231c14;
+  --bg-card-hover: #2d241a;
+  --bg-header: #12100a;
+  --bg-chip: #34281b;
+  --bg-chip-hover: #423322;
+  --bg-input: #100d08;
+
+  --border-subtle: rgba(255, 176, 0, 0.14);
+  --border-card: rgba(255, 176, 0, 0.14);
+  --border-hover: #ffb000;
+
   --text-main: #ffd27a;
   --text-sub: #e6a84d;
   --text-dim: #996e33;
+
+  --accent-primary: #ffb000;
   --accent-cyan: #ffd269;
   --accent-blue: #ffaa00;
   --accent-mauve: #ff8800;
   --accent-green: #ffcc00;
   --accent-peach: #ff9900;
   --accent-red: #ff4400;
-  --glow-accent: rgba(255, 176, 0, 0.35);
+  --accent-yellow: #ffb000;
 }
 
 /* Theme 4: Blueberry (Electric Midnight) */
-body.theme-blueberry, body.theme-modern {
+body.theme-blueberry,
+body.theme-modern,
+body.theme-frutiger {
   --bg-desktop: #0b0f19;
-  --bg-panel: rgba(15, 23, 42, 0.92);
-  --bg-card: rgba(22, 34, 62, 0.82);
-  --bg-card-hover: rgba(30, 48, 88, 0.9);
-  --bg-chip: rgba(30, 48, 88, 0.7);
-  --border-card: rgba(56, 189, 248, 0.16);
-  --border-card-hover: #38bdf8;
+  --bg-panel: #0f172a;
+  --bg-card: #1e3a5f;
+  --bg-card-hover: #234570;
+  --bg-header: #0b1322;
+  --bg-chip: #274b79;
+  --bg-chip-hover: #315d96;
+  --bg-input: #0a1120;
+
+  --border-subtle: rgba(56, 189, 248, 0.14);
+  --border-card: rgba(56, 189, 248, 0.14);
+  --border-hover: #38bdf8;
+
   --text-main: #f0f6fc;
   --text-sub: #94a3b8;
   --text-dim: #64748b;
+
+  --accent-primary: #38bdf8;
   --accent-cyan: #00f2fe;
   --accent-blue: #38bdf8;
   --accent-mauve: #818cf8;
   --accent-green: #34d399;
   --accent-peach: #fb923c;
   --accent-red: #f87171;
-  --glow-accent: rgba(56, 189, 248, 0.35);
+  --accent-yellow: #fbbf24;
 }
 
 /* Theme 5: Rose Pine */
 body.theme-rosepine {
   --bg-desktop: #191724;
-  --bg-panel: rgba(31, 29, 46, 0.92);
-  --bg-card: rgba(38, 35, 58, 0.85);
-  --bg-card-hover: rgba(57, 53, 82, 0.92);
-  --bg-chip: rgba(42, 39, 63, 0.8);
-  --border-card: rgba(235, 188, 186, 0.16);
-  --border-card-hover: #ebbcba;
+  --bg-panel: #1f1d2e;
+  --bg-card: #26233a;
+  --bg-card-hover: #2f2b48;
+  --bg-header: #191724;
+  --bg-chip: #363252;
+  --bg-chip-hover: #433e66;
+  --bg-input: #151320;
+
+  --border-subtle: rgba(235, 111, 146, 0.12);
+  --border-card: rgba(235, 111, 146, 0.12);
+  --border-hover: #eb6f92;
+
   --text-main: #e0def4;
   --text-sub: #908caa;
   --text-dim: #6e6a86;
+
+  --accent-primary: #eb6f92;
   --accent-cyan: #9ccfd8;
   --accent-blue: #31748f;
   --accent-mauve: #c4a7e7;
   --accent-green: #9ccfd8;
   --accent-peach: #f6c177;
   --accent-red: #eb6f92;
-  --glow-accent: rgba(235, 188, 186, 0.3);
+  --accent-yellow: #f6c177;
 }
 
 /* Theme 6: Gruvbox Material */
 body.theme-gruvbox {
   --bg-desktop: #1d2021;
-  --bg-panel: rgba(40, 40, 40, 0.94);
-  --bg-card: rgba(50, 48, 47, 0.88);
-  --bg-card-hover: rgba(60, 56, 54, 0.94);
-  --bg-chip: rgba(50, 48, 47, 0.8);
-  --border-card: rgba(212, 190, 152, 0.16);
-  --border-card-hover: #d4be98;
+  --bg-panel: #282828;
+  --bg-card: #3c3836;
+  --bg-card-hover: #45403e;
+  --bg-header: #1d2021;
+  --bg-chip: #504945;
+  --bg-chip-hover: #605753;
+  --bg-input: #191b1c;
+
+  --border-subtle: rgba(212, 190, 152, 0.12);
+  --border-card: rgba(212, 190, 152, 0.12);
+  --border-hover: #d4be98;
+
   --text-main: #d4be98;
   --text-sub: #a89984;
   --text-dim: #7c6f64;
+
+  --accent-primary: #d4be98;
   --accent-cyan: #89b482;
   --accent-blue: #7daea3;
   --accent-mauve: #d3869b;
   --accent-green: #a9b665;
   --accent-peach: #e78a4e;
   --accent-red: #ea6962;
-  --glow-accent: rgba(231, 138, 78, 0.3);
+  --accent-yellow: #d8a657;
 }
 
 /* Theme 7: Nordic Frost */
 body.theme-nordic {
   --bg-desktop: #242933;
-  --bg-panel: rgba(46, 52, 64, 0.92);
-  --bg-card: rgba(59, 66, 82, 0.82);
-  --bg-card-hover: rgba(67, 76, 94, 0.92);
-  --bg-chip: rgba(67, 76, 94, 0.75);
-  --border-card: rgba(136, 192, 208, 0.18);
-  --border-card-hover: #88c0d0;
+  --bg-panel: #2e3440;
+  --bg-card: #3b4252;
+  --bg-card-hover: #434c5e;
+  --bg-header: #242933;
+  --bg-chip: #4c566a;
+  --bg-chip-hover: #58647a;
+  --bg-input: #1e222b;
+
+  --border-subtle: rgba(136, 192, 208, 0.14);
+  --border-card: rgba(136, 192, 208, 0.14);
+  --border-hover: #88c0d0;
+
   --text-main: #eceff4;
   --text-sub: #d8dee9;
   --text-dim: #4c566a;
+
+  --accent-primary: #88c0d0;
   --accent-cyan: #88c0d0;
   --accent-blue: #81a1c1;
   --accent-mauve: #b48ead;
   --accent-green: #a3be8c;
   --accent-peach: #d08770;
   --accent-red: #bf616a;
-  --glow-accent: rgba(136, 192, 208, 0.35);
+  --accent-yellow: #ebcb8b;
 }
 
 /* ==========================================================================
-   3. GLOBAL RESET & BASE STYLES
+   3. GLOBAL RESET & BASE TYPOGRAPHY
    ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -211,207 +282,266 @@ body.theme-nordic {
   padding: 0;
 }
 
-body {
-  font-family: var(--font-ui);
-  background-color: var(--bg-desktop);
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-panel);
   color: var(--text-main);
-  line-height: 1.5;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
   user-select: none;
+  overflow-x: hidden;
 }
 
-/* Scrollbars - Minimalist Pill */
+/* Ultra-lightweight Scrollbars */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-card);
+  background: var(--border-subtle);
   border-radius: var(--radius-pill);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-cyan);
+  background: var(--text-dim);
+}
+
+/* Typography Utility Hierarchy */
+.text-stat-large {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: var(--text-main);
+}
+
+.text-label-caps {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.text-body {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-main);
 }
 
 /* ==========================================================================
-   4. FLOATING ISLAND HUD (SECONDARY SCREEN)
+   4. LAYOUT CONTAINERS: SECONDARY HUD & CONTROL CENTER
    ========================================================================== */
+.hud-root,
 .caelestia-hud-frame {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+}
+
+/* Widget Container Area */
+.hud-widgets,
+.caelestia-widget-list,
+#bento-widget-container,
+#widget-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--bg-panel);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  border-left: 1px solid var(--border-card);
-  border-right: 1px solid var(--border-card);
+  padding: 12px;
+  width: 100%;
+  contain: layout style;
 }
 
-/* Top Floating Menu Bar / Status Island */
-.caelestia-waybar-island, .macos-menubar {
+/* ==========================================================================
+   5. NATIVE 44PX TOP BAR / HEADER (CLEAN SOLID, ZERO BLUR)
+   ========================================================================== */
+.hud-topbar,
+.hud-header,
+.caelestia-waybar-island,
+.macos-menubar {
+  height: var(--header-height);
+  min-height: var(--header-height);
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(30, 30, 46, 0.72);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: var(--radius-pill);
-  padding: 7px 16px;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.15), 0 12px 32px rgba(0, 0, 0, 0.4);
-  gap: 8px;
-  flex-wrap: wrap;
-  transition: all var(--trans-fast);
+  padding: 0 14px;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
+.hud-topbar-left,
+.hud-header-left,
+.hud-topbar-right,
+.hud-header-right,
+.cc-titlebar-left,
+.cc-titlebar-right,
 .waybar-cluster {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-/* Status Pill & Dot */
-.arch-brand-pill, .macos-brand-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 2px 8px rgba(0, 0, 0, 0.15);
-  color: #ffffff;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  transition: all var(--trans-fast);
-}
-
-.arch-dot-pulse, .macos-dot-active {
-  width: 7px;
-  height: 7px;
+/* App Dot & Brand Tag */
+.hud-status-dot,
+.hud-dot,
+.arch-dot-pulse,
+.macos-dot-active {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #34d399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.8), 0 0 2px #34d399;
-  animation: macos-pulse 2.5s infinite ease-in-out;
-}
-@keyframes macos-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px rgba(52, 211, 153, 0.8); }
-  50% { opacity: 0.55; transform: scale(0.85); box-shadow: 0 0 4px rgba(52, 211, 153, 0.3); }
+  background-color: var(--accent-green);
+  display: inline-block;
+  flex-shrink: 0;
 }
 
-/* Spaces Indicator */
-.workspaces-pill, .macos-spaces-pill {
+.hud-brand,
+.hud-title,
+.hud-pill,
+#header-brand-tag,
+.arch-brand-pill,
+.macos-brand-pill {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--text-main);
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3px 8px;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Spaces Dots */
+.workspaces-pill,
+.macos-spaces-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: var(--bg-chip);
   border-radius: var(--radius-pill);
 }
+
 .ws-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--text-dim);
-  transition: all var(--trans-fast);
-}
-.ws-dot.active {
-  width: 14px;
-  border-radius: var(--radius-pill);
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px var(--glow-accent);
+  transition: background-color var(--trans-fast);
 }
 
-/* macOS Quick Action Chips */
-.waybar-chip-btn, .macos-chip-btn {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--text-main);
-  padding: 4px 10px;
+.ws-dot.active {
+  width: 12px;
   border-radius: var(--radius-pill);
+  background: var(--accent-primary);
+}
+
+/* Header Buttons / Control Chips */
+.hud-icon-btn,
+.waybar-chip-btn,
+.macos-chip-btn {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-sub);
   font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  transition: all var(--trans-fast);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-.waybar-chip-btn:hover, .macos-chip-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.28);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  outline: none;
+  transition: border-color var(--trans-fast), color var(--trans-fast), background-color var(--trans-fast);
 }
 
-.theme-dropdown-select, .macos-select {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.hud-icon-btn:hover,
+.waybar-chip-btn:hover,
+.macos-chip-btn:hover {
+  background: var(--bg-chip-hover);
+  border-color: var(--border-hover);
   color: var(--text-main);
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
+}
+
+.hud-icon-btn:active,
+.waybar-chip-btn:active,
+.macos-chip-btn:active {
+  background: var(--bg-card);
+}
+
+/* Header Theme Dropdown Selector */
+.hud-select,
+.theme-dropdown-select,
+.macos-select {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
   font-family: var(--font-ui);
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   outline: none;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: all var(--trans-fast);
+  transition: border-color var(--trans-fast);
 }
-.theme-dropdown-select:hover, .macos-select:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.25);
+
+.hud-select:hover,
+.theme-dropdown-select:hover,
+.macos-select:hover {
+  border-color: var(--border-hover);
 }
-.theme-dropdown-select option {
-  background: #11111b;
-  color: #cdd6f4;
+
+.hud-select option,
+.theme-dropdown-select option,
+.macos-select option {
+  background: var(--bg-panel);
+  color: var(--text-main);
 }
 
 /* ==========================================================================
-   5. MODULAR WIDGET CARDS
+   6. WIDGET CARDS (RAYCAST STYLE SPECIFICATION)
    ========================================================================== */
-.caelestia-widget-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
 .widget-card {
   position: relative;
-  background: rgba(30, 30, 46, 0.7);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: var(--radius-md);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.12), 0 10px 30px -5px rgba(0, 0, 0, 0.4);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
   padding: 16px;
-  transition: border-color var(--trans-smooth), transform var(--trans-fast), box-shadow var(--trans-fast);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 110px;
+  transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
 }
+
 .widget-card:hover {
-  border-color: rgba(255, 255, 255, 0.24);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18), 0 14px 36px -4px rgba(0, 0, 0, 0.45);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+.widget-inner-content {
+  width: 100%;
 }
 
 .widget-card-header {
@@ -425,19 +555,19 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 700;
-  color: var(--accent-cyan);
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--accent-primary);
 }
 
+/* Edit Mode Delete Button */
 .widget-delete-btn {
   display: none;
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 10px;
+  right: 10px;
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -445,180 +575,297 @@ body {
   color: #11111b;
   border: none;
   font-size: 11px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
-  z-index: 10;
-}
-.widget-card.edit-mode .widget-delete-btn {
-  display: flex;
+  z-index: 20;
   align-items: center;
   justify-content: center;
 }
 
-/* ==========================================================================
-   6. WIDGET COMPONENT DESIGNS
-   ========================================================================== */
-
-/* A. Compact Status Pill Card */
-.caelestia-waybar-cluster {
+.widget-card.edit-mode .widget-delete-btn {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
 }
-.cael-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: var(--radius-pill);
-  background: var(--bg-chip);
-  border: 1px solid var(--border-card);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-main);
-  transition: all var(--trans-fast);
-}
-.chip-cyan { color: var(--accent-cyan); border-color: rgba(137, 220, 235, 0.3); }
-.chip-mauve { color: var(--accent-mauve); border-color: rgba(203, 166, 247, 0.3); }
-.chip-green { color: var(--accent-green); border-color: rgba(166, 227, 161, 0.3); }
-.chip-peach { color: var(--accent-peach); border-color: rgba(250, 179, 135, 0.3); }
 
-/* B. Clock & Date */
+/* Widget Size Presets */
+.widget-size-compact {
+  padding: 12px 14px;
+}
+
+.widget-size-small {
+  padding: 14px;
+}
+
+.widget-size-medium {
+  padding: 16px;
+}
+
+.widget-size-large {
+  padding: 18px;
+}
+
+/* ==========================================================================
+   7. CLOCK WIDGET (MACOS STANDBY / RAYCAST TYPOGRAPHIC)
+   ========================================================================== */
 .caelestia-clock-widget {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 0;
-}
-.caelestia-clock-time {
-  font-family: var(--font-mono);
-  font-size: 42px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--text-main);
-  line-height: 1;
-}
-.caelestia-clock-secs {
-  font-size: 18px;
-  color: var(--accent-cyan);
-  font-weight: 600;
-  margin-left: 2px;
-}
-.caelestia-clock-meta {
-  text-align: right;
-}
-.caelestia-date-chip {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--accent-peach);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.caelestia-day-chip {
-  font-size: 11px;
-  color: var(--text-sub);
-  margin-top: 3px;
+  padding: 4px 2px;
 }
 
-/* C. Fish Friend Interactive Habitat */
+.caelestia-clock-time {
+  font-size: 56px;
+  font-weight: 300;
+  letter-spacing: -1.5px;
+  color: var(--text-main);
+  line-height: 1;
+  font-family: var(--font-ui);
+}
+
+.caelestia-clock-secs {
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--accent-primary);
+  margin-left: 2px;
+  vertical-align: baseline;
+}
+
+.caelestia-clock-meta {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.caelestia-date-chip {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
+.caelestia-day-chip {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   8. SYSTEM STATS & HARDWARE TELEMETRY WIDGET
+   ========================================================================== */
+.btop-telemetry-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btop-metric-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btop-metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+}
+
+.btop-metric-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* Standard Linear Progress Bar: 6px, No animations on track */
+.btop-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.btop-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent-primary);
+  transition: width var(--trans-smooth);
+}
+
+.fill-cyan {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+}
+
+.fill-mauve {
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan));
+}
+
+.fill-green {
+  background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+}
+
+/* Circular Gauge Visual Layout */
+.circular-gauges-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 6px 0;
+  gap: 12px;
+}
+
+.gauge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.gauge-svg {
+  width: 74px;
+  height: 74px;
+  transform: rotate(-90deg);
+}
+
+.gauge-bg {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 6;
+  fill: none;
+}
+
+.gauge-fill {
+  stroke: var(--accent-primary);
+  stroke-width: 6;
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--trans-smooth);
+}
+
+.gauge-center-text {
+  position: absolute;
+  top: 18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.gauge-pct {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.gauge-lbl {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Compact Status Pill Cluster */
+.caelestia-waybar-cluster {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cael-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.chip-cyan { color: var(--accent-cyan); }
+.chip-mauve { color: var(--accent-mauve); }
+.chip-green { color: var(--accent-green); }
+.chip-peach { color: var(--accent-peach); }
+
+/* ==========================================================================
+   9. FISH TANK COMPANION HABITAT
+   ========================================================================== */
 .caelestia-tank-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 .caelestia-tank-viewport {
   position: relative;
   width: 100%;
   height: 220px;
-  border-radius: var(--radius-sm);
-  background: radial-gradient(circle at 50% 25%, rgba(24, 34, 60, 0.9) 0%, rgba(10, 15, 26, 0.95) 100%);
-  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  background: #0a1628;
+  border: 1px solid var(--border-subtle);
   overflow: hidden;
-  cursor: crosshair;
+  cursor: pointer;
 }
+
 #fish-tank-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  transform: translateZ(0);
+  will-change: transform;
 }
+
 .tank-prompt-sub {
   font-size: 11px;
   color: var(--text-dim);
-  font-family: var(--font-mono);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
-/* D. Btop Hardware Telemetry Progress Bars */
-.btop-telemetry-container {
+/* ==========================================================================
+   10. DYNAMIC MUSIC PLAYER HUD (RAYCAST / LINEAR COMPACT)
+   ========================================================================== */
+.caelestia-music-card,
+.macos-music-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-.btop-metric-row {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.btop-metric-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-sub);
-}
-.btop-metric-val {
-  font-weight: 700;
-  color: var(--text-main);
-}
-.btop-bar-track {
+  gap: 12px;
   width: 100%;
-  height: 6px;
-  background: var(--bg-chip);
-  border-radius: var(--radius-pill);
-  overflow: hidden;
-  position: relative;
 }
-.btop-bar-fill {
-  height: 100%;
-  border-radius: var(--radius-pill);
-  transition: width 0.6s var(--ease-out-expo);
-}
-.fill-cyan { background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); }
-.fill-mauve { background: linear-gradient(90deg, #a855f7, var(--accent-mauve)); }
-.fill-green { background: linear-gradient(90deg, #10b981, var(--accent-green)); }
 
-/* E. macOS Glass Music Player HUD (Windows Media Session) */
-.caelestia-music-card {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
 .music-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .music-live-badge {
-  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   color: var(--text-dim);
-  transition: color var(--trans-fast);
+  text-transform: uppercase;
 }
+
 .music-live-badge.badge-playing {
   color: var(--accent-green);
 }
+
 .music-live-badge.badge-paused {
-  color: var(--accent-peach, #fb923c);
+  color: var(--accent-peach);
 }
+
 .music-live-badge.badge-idle {
   color: var(--text-dim);
 }
@@ -626,20 +873,20 @@ body {
 .music-main-body {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
+/* 64x64 Album Art Container */
 .music-album-art-wrap {
-  width: 60px;
-  height: 60px;
-  min-width: 60px;
-  min-height: 60px;
-  border-radius: var(--radius-sm, 10px);
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  min-height: 64px;
+  border-radius: 10px;
   overflow: hidden;
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-card);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
   flex-shrink: 0;
 }
 
@@ -648,13 +895,13 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: var(--radius-sm, 10px);
+  border-radius: 10px;
 }
 
 .music-album-fallback {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #3730a3 0%, #6b21a8 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -662,8 +909,7 @@ body {
 }
 
 .music-fallback-svg {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-  opacity: 0.9;
+  opacity: 0.85;
 }
 
 .music-info-meta {
@@ -676,8 +922,8 @@ body {
 }
 
 .music-title-text {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -686,8 +932,9 @@ body {
 }
 
 .music-artist-text {
-  font-size: 11px;
-  color: var(--text-dim);
+  font-size: 12px;
+  color: var(--text-sub);
+  opacity: 0.6;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -699,55 +946,52 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .music-ctrl-btn {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 1px solid var(--border-card);
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-chip);
   color: var(--text-main);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--trans-fast, 0.15s ease);
+  outline: none;
   padding: 0;
+  transition: background-color var(--trans-fast), border-color var(--trans-fast);
 }
+
 .music-ctrl-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: var(--border-card-hover);
-  transform: scale(1.08);
-}
-.music-ctrl-btn:active {
-  transform: scale(0.94);
+  background: var(--bg-chip-hover);
+  border-color: var(--border-hover);
 }
 
 .music-play-btn {
-  width: 30px;
-  height: 30px;
-  background: var(--accent-cyan);
-  color: #0d1117;
+  width: 32px;
+  height: 32px;
+  background: var(--accent-primary);
+  color: #11111b;
   border-color: transparent;
-  box-shadow: 0 2px 10px var(--glow-accent);
-}
-.music-play-btn:hover {
-  background: #5eead4;
-  transform: scale(1.1);
 }
 
+.music-play-btn:hover {
+  background: var(--accent-cyan);
+}
+
+/* 3px Height Audio Progress Bar */
 .music-progress-section {
   width: 100%;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .music-progress-bar {
   width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 2px;
   overflow: hidden;
   position: relative;
@@ -755,196 +999,287 @@ body {
 
 .music-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-cyan, #06b6d4), var(--accent-mauve, #c084fc));
+  background: var(--accent-primary);
   border-radius: 2px;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width var(--trans-smooth);
 }
 
 .music-time-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 .music-time-text {
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-dim);
-  letter-spacing: 0.02em;
 }
 
-/* F. Dynamic Weather Capsule */
+/* ==========================================================================
+   11. WEATHER CAPSULE & MULTI-DAY FORECAST
+   ========================================================================== */
 .caelestia-weather-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .weather-temp-big {
-  font-family: var(--font-mono);
-  font-size: 34px;
-  font-weight: 800;
+  font-size: 48px;
+  font-weight: 200;
+  letter-spacing: -1px;
   color: var(--text-main);
   line-height: 1;
 }
+
 .weather-loc-tag {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-sub);
-}
-.weather-condition-pill {
-  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 700;
-  color: var(--accent-cyan);
-  text-align: right;
-}
-.weather-range-pill {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--text-dim);
-  text-align: right;
-  margin-top: 2px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  margin-bottom: 2px;
 }
 
-/* G. Macro Launcher Tiles */
+.weather-condition-pill {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  text-align: right;
+}
+
+.weather-range-pill {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: right;
+  margin-top: 3px;
+}
+
+/* 3-Day Forecast Row Columns */
+.weather-forecast-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  gap: 8px;
+}
+
+.forecast-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.forecast-day {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+}
+
+.forecast-icon {
+  font-size: 16px;
+}
+
+.forecast-temp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* ==========================================================================
+   12. MACRO TILES, AI MODEL ROTATOR, POMODORO & NOTES
+   ========================================================================== */
+/* Macro Action Grid */
 .caelestia-macro-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
+
 .caelestia-macro-btn {
   background: var(--bg-chip);
-  border: 1px solid var(--border-card);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 8px 4px;
+  padding: 10px 4px;
   color: var(--text-main);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  transition: all var(--trans-fast);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  outline: none;
+  transition: background-color var(--trans-fast), border-color var(--trans-fast), color var(--trans-fast);
 }
-.caelestia-macro-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
-  transform: translateY(-2px);
-}
-.macro-icon { font-size: 16px; }
 
-/* H. AI Model Rotator */
+.caelestia-macro-btn:hover {
+  background: var(--bg-chip-hover);
+  border-color: var(--border-hover);
+  color: var(--accent-primary);
+}
+
+.macro-icon {
+  font-size: 16px;
+}
+
+/* AI Model Rotator */
 .caelestia-rotator-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .rotator-name-label {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent-mauve);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-top: 2px;
 }
 
-/* Quick Notes */
+/* Pomodoro Timer */
+.pomo-time-display {
+  font-size: 32px;
+  font-weight: 300;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+/* Quick Scratchpad Notes */
 .caelestia-notes-box {
   width: 100%;
-  height: 72px;
-  background: var(--bg-chip);
-  border: 1px solid var(--border-card);
+  height: 80px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 8px 10px;
+  padding: 10px 12px;
   color: var(--text-main);
   font-family: var(--font-ui);
   font-size: 12px;
+  line-height: 1.4;
   resize: none;
   outline: none;
   transition: border-color var(--trans-fast);
 }
+
 .caelestia-notes-box:focus {
-  border-color: var(--accent-cyan);
+  border-color: var(--accent-primary);
 }
 
 /* ==========================================================================
-   7. CONTROL CENTER DASHBOARD (MACOS STYLE)
+   13. CONTROL CENTER: ROOT, TABS & CARDS (MACOS / LINEAR DASHBOARD)
    ========================================================================== */
-.cc-wrapper {
-  padding: 24px 28px;
+.cc-wrapper,
+.cc-root {
   min-height: 100vh;
-  background: radial-gradient(circle at 10% 10%, var(--bg-desktop) 0%, #08090d 100%);
+  padding: 24px 28px;
+  background: var(--bg-panel);
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.cc-header {
+/* Control Center Header & Titlebar */
+.cc-header,
+.cc-titlebar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-card);
+  border-bottom: 1px solid var(--border-subtle);
 }
+
 .cc-brand-title {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #fff;
+  gap: 10px;
 }
 
-/* Clean Floating macOS Segmented Tabs */
-.cc-nav-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 22px;
-  background: rgba(20, 20, 32, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  padding: 5px;
+.cc-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-main);
 }
-.cc-tab-btn {
+
+.cc-version {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-chip);
+  color: var(--text-sub);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Clean Solid Segmented Navigation Bar */
+.cc-nav-tabs,
+.cc-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 22px;
+  background: var(--bg-header);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 4px;
+}
+
+.cc-tab-btn,
+.cc-tab {
   flex: 1;
-  padding: 9px 14px;
+  padding: 8px 14px;
   background: transparent;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
   color: var(--text-sub);
   font-family: var(--font-ui);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all var(--trans-fast);
+  transition: color var(--trans-fast), background-color var(--trans-fast), border-color var(--trans-fast);
 }
-.cc-tab-btn:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.06);
+
+.cc-tab-btn:hover,
+.cc-tab:hover {
+  color: var(--text-main);
+  background: var(--bg-chip);
 }
-.cc-tab-btn.active {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+.cc-tab-btn.active,
+.cc-tab.active {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border-subtle);
+}
+
+/* Tab Panels */
+.cc-content {
+  width: 100%;
 }
 
 .cc-panel {
   display: none;
 }
+
 .cc-panel.active {
   display: block;
-  animation: ccFade 0.22s var(--ease-out-expo);
-}
-@keyframes ccFade {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 
 .cc-grid-2col {
@@ -953,104 +1288,232 @@ body {
   gap: 20px;
 }
 
+/* Control Center Cards */
 .cc-card {
-  background: rgba(30, 30, 46, 0.72);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
   padding: 20px;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: var(--shadow-card);
   margin-bottom: 20px;
 }
+
 .cc-card-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--text-main);
   margin-bottom: 4px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .cc-card-desc {
   font-size: 12px;
   color: var(--text-dim);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  line-height: 1.4;
 }
 
-/* Button UI */
+/* Buttons */
 .cc-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: var(--bg-chip);
-  border: 1px solid var(--border-card);
+  border: 1px solid var(--border-subtle);
   color: var(--text-main);
-  padding: 9px 18px;
+  padding: 8px 16px;
   border-radius: var(--radius-sm);
   font-family: var(--font-ui);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--trans-fast);
-}
-.cc-btn:hover {
-  background: var(--bg-card-hover);
-  border-color: var(--accent-cyan);
-  color: var(--accent-cyan);
-  transform: translateY(-1px);
-}
-.cc-btn-primary {
-  background: linear-gradient(135deg, var(--accent-cyan), #00b4d8);
-  color: #11111b;
-  font-weight: 700;
-  border-color: transparent;
-  box-shadow: 0 4px 16px var(--glow-accent);
-}
-.cc-btn-primary:hover {
-  background: linear-gradient(135deg, #a6e3a1, var(--accent-cyan));
-  color: #11111b;
-  box-shadow: 0 6px 22px var(--glow-accent);
-}
-.cc-btn-danger {
-  background: rgba(243, 139, 168, 0.14);
-  color: var(--accent-red);
-  border-color: rgba(243, 139, 168, 0.35);
-}
-.cc-btn-danger:hover {
-  background: var(--accent-red);
-  color: #11111b;
+  outline: none;
+  transition: background-color var(--trans-fast), border-color var(--trans-fast);
 }
 
-/* Form Controls */
+.cc-btn:hover {
+  background: var(--bg-chip-hover);
+  border-color: var(--border-hover);
+}
+
+.cc-btn-primary {
+  background: var(--accent-primary);
+  color: #11111b;
+  font-weight: 600;
+  border-color: transparent;
+}
+
+.cc-btn-primary:hover {
+  background: var(--accent-cyan);
+  border-color: transparent;
+}
+
+.cc-btn-danger {
+  background: var(--bg-chip);
+  color: var(--accent-red);
+  border-color: rgba(243, 139, 168, 0.25);
+}
+
+.cc-btn-danger:hover {
+  background: rgba(243, 139, 168, 0.15);
+  border-color: var(--accent-red);
+}
+
+/* Form Inputs & Selects */
 .cc-input-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
+
 .cc-label {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-sub);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   display: block;
-  font-family: var(--font-mono);
 }
-.cc-select, .cc-text-input {
+
+.cc-select,
+.cc-text-input {
   width: 100%;
-  background: var(--bg-desktop);
-  border: 1px solid var(--border-card);
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
   color: var(--text-main);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   font-size: 12px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   outline: none;
   transition: border-color var(--trans-fast);
 }
-.cc-select:focus, .cc-text-input:focus {
-  border-color: var(--accent-cyan);
+
+.cc-select:focus,
+.cc-text-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.cc-select option {
+  background: var(--bg-panel);
+  color: var(--text-main);
+}
+
+/* Standard Range Slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--bg-chip);
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid var(--bg-panel);
+}
+
+/* iOS Toggle Switch */
+.ios-switch {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+}
+
+.ios-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  transition: background-color var(--trans-fast), border-color var(--trans-fast);
+  border-radius: 22px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: transform var(--trans-fast);
+  border-radius: 50%;
+}
+
+input:checked + .switch-slider {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+input:checked + .switch-slider:before {
+  transform: translateX(16px);
+  background-color: #11111b;
+}
+
+/* ==========================================================================
+   14. CONTROL CENTER: MONITOR MAP, THEMES GALLERY & WIDGET PICKER
+   ========================================================================== */
+/* Monitor Placement Canvas Map */
+.monitor-map-view {
+  width: 100%;
+  height: 130px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.map-box {
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-chip);
+  border-radius: var(--radius-xs);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: border-color var(--trans-fast);
+}
+
+.map-box.active {
+  border-color: var(--accent-primary);
+  background: var(--bg-card);
+  color: #ffffff;
 }
 
 /* Dock Mode Grid */
@@ -1060,54 +1523,163 @@ body {
   gap: 10px;
   margin-bottom: 14px;
 }
+
 .cc-dock-card {
-  border: 1px solid var(--border-card);
+  border: 1px solid var(--border-subtle);
   background: var(--bg-chip);
   padding: 14px 10px;
   border-radius: var(--radius-sm);
   text-align: center;
   cursor: pointer;
-  transition: all var(--trans-fast);
-}
-.cc-dock-card:hover {
-  border-color: var(--accent-blue);
-  background: var(--bg-card-hover);
-}
-.cc-dock-card.active {
-  border-color: var(--accent-cyan);
-  background: rgba(137, 220, 235, 0.12);
-  box-shadow: 0 0 16px var(--glow-accent);
+  transition: border-color var(--trans-fast), background-color var(--trans-fast);
 }
 
-/* Themes Gallery */
+.cc-dock-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-chip-hover);
+}
+
+.cc-dock-card.active {
+  border-color: var(--accent-primary);
+  background: var(--bg-card);
+}
+
+/* Themes Showcase Gallery */
 .omarchy-theme-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
+
 .omarchy-theme-card {
-  border: 2px solid var(--border-card);
+  border: 1px solid var(--border-subtle);
   background: var(--bg-card);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-card);
   padding: 16px;
   cursor: pointer;
-  transition: all var(--trans-fast);
+  transition: border-color var(--trans-fast);
   position: relative;
 }
+
 .omarchy-theme-card:hover {
-  border-color: var(--accent-cyan);
-  transform: translateY(-2px);
+  border-color: var(--border-hover);
 }
+
 .omarchy-theme-card.active {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 18px var(--glow-accent);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
 }
+
 .theme-swatch-row {
   display: flex;
   gap: 5px;
-  height: 12px;
+  height: 10px;
   margin-top: 10px;
   border-radius: var(--radius-pill);
   overflow: hidden;
 }
-.theme-swatch { flex: 1; }
+
+.theme-swatch {
+  flex: 1;
+}
+
+/* Modular Widget Picker List */
+.widget-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.widget-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-subtle);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--trans-fast), background-color var(--trans-fast);
+}
+
+.widget-picker-item:hover {
+  background: var(--bg-chip-hover);
+  border-color: var(--border-hover);
+}
+
+.widget-item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.widget-item-icon {
+  font-size: 18px;
+}
+
+.widget-item-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.widget-item-cat {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   15. LIVE WALLPAPER ENGINE & VIDEO PREVIEW (GPU OPTIMIZED)
+   ========================================================================== */
+#video-player,
+video,
+#cc-video-preview {
+  transform: translateZ(0);
+}
+
+/* Video Preview Container */
+.video-preview-box {
+  width: 100%;
+  height: 260px;
+  background: #000000;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--border-subtle);
+}
+
+#cc-video-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#cc-video-none {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ==========================================================================
+   16. PERFORMANCE GUARDS & ACCESSIBILITY
+   ========================================================================== */
+/* Strictly enforce NO backdrop-filter across all selectors */
+*, *::before, *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Reduce Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
