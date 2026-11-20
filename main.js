@@ -4,6 +4,11 @@ const fs = require('fs');
 const os = require('os');
 const { exec } = require('child_process');
 
+// GPU & memory optimizations
+app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
+app.commandLine.appendSwitch('disable-accelerated-video-decode');
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=256');
+
 let controlCenterWin = null;
 let secondaryHudWin = null;
 let wallpaperWin = null;
@@ -95,6 +100,7 @@ function createControlCenterWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      backgroundThrottling: true,
     },
   });
 
@@ -147,15 +153,16 @@ function createSecondaryHudWindow(monitorIndex, dockMode = 'left', alwaysOnTop =
     width: bounds.width,
     height: bounds.height,
     frame: false,
-    transparent: true,
-    backgroundColor: '#00000000',
+    transparent: false,
+    backgroundColor: '#11111b',
     alwaysOnTop: alwaysOnTop,
     skipTaskbar: false,
-    hasShadow: true,
+    hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      backgroundThrottling: true,
     },
   });
 
@@ -196,6 +203,7 @@ function startWallpaperWindow(monitorIndex) {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      backgroundThrottling: true,
     },
   });
 
@@ -321,13 +329,13 @@ function startTelemetryBroadcast() {
   if (statsInterval) clearInterval(statsInterval);
   statsInterval = setInterval(() => {
     const stats = collectNativeStats();
-    if (secondaryHudWin && !secondaryHudWin.isDestroyed()) {
+    if (secondaryHudWin && !secondaryHudWin.isDestroyed() && !secondaryHudWin.isMinimized()) {
       secondaryHudWin.webContents.send('telemetry-update', stats);
     }
-    if (controlCenterWin && !controlCenterWin.isDestroyed()) {
+    if (controlCenterWin && !controlCenterWin.isDestroyed() && !controlCenterWin.isMinimized()) {
       controlCenterWin.webContents.send('telemetry-update', stats);
     }
-  }, 1200);
+  }, 3000);
 }
 
 // Scan local videos in Downloads and Videos
@@ -545,7 +553,7 @@ const MEDIA_SESSION_CMD = Buffer.from(MEDIA_SESSION_PS, 'utf16le').toString('bas
 
 function fetchMediaSession() {
   const now = Date.now();
-  if (mediaSessionCacheTime && (now - mediaSessionCacheTime < 2000)) {
+  if (mediaSessionCacheTime && (now - mediaSessionCacheTime < 5000)) {
     return Promise.resolve(mediaSessionCache);
   }
   if (mediaSessionInFlight) {
@@ -553,7 +561,7 @@ function fetchMediaSession() {
   }
 
   mediaSessionInFlight = new Promise((resolve) => {
-    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${MEDIA_SESSION_CMD}`, { timeout: 3500 }, (err, stdout) => {
+    exec(`powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand ${MEDIA_SESSION_CMD}`, { timeout: 4000 }, (err, stdout) => {
       if (err || !stdout) {
         resolve(null);
         return;
